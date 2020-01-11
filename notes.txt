@@ -1,6 +1,6 @@
 ::::Panel::::
 
-init -> table, activity_list,
+init -> table, activity_list =>  [(activity, 1/0), ...],
 
 toggle_checks -> add 1 for checked and 0 for unchecked
 
@@ -10,4 +10,15 @@ remove_activity(activity_name) -> del a row in the activity section of the table
 modify_mood -> most likely from a selection of predefined moods
 
 modify_percent_done -> from 0 to 100, making sure the user does not write down more or less.
+
+
+::::Day:::: (this will be our day object to store data)
+
+init -> activity_list = None, Mood = None, Percent = None, current_date
+
+
+::::Timeline:::: (this will be our timeline object to store pointer of our days objects)
+
+init -> empty dict to store our week datastructure {"week1", [day1, day2, day3, ...], "week2": ...}
+        
 
