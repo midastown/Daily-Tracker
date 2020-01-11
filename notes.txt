@@ -1,0 +1,13 @@
+::::Panel::::
+
+init -> table, activity_list,
+
+toggle_checks -> add 1 for checked and 0 for unchecked
+
+add_activity(activity_name) -> add a row in the activity section of the table, with checkboxes
+remove_activity(activity_name) -> del a row in the activity section of the table.
+
+modify_mood -> most likely from a selection of predefined moods
+
+modify_percent_done -> from 0 to 100, making sure the user does not write down more or less.
+
