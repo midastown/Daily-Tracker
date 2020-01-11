@@ -1,46 +1,52 @@
 from tkinter import *
-from tkinter.ttk import *
+import tkinter.ttk as ttk
+import tkinter.font as font
 
-'''class Panel:
+height = 500
+width = 1500
 
-	def __init__(self):
-		self.tree = ttk.Treeview(master)
+class Panel:
 
-	def create_panel(self):
-		pan = Treeview(self)
-    	pan['columns'] = ('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday')
+        def __init__(self,w,height,width):
+                self.w = w
+                self.height = height
+                self.width = width
+                self.activities = ['Activity 1', 'Activity 2', 'Activity 3', 'Activity 4', 'Activity 5']
+                self.days = ['','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
+                self.style = ttk.Style()
+                self.style.configure("Treeview.Heading", font=(None, 15))
+                self.style.configure('Treeview',rowheight=75)
+                self.style.configure('Treeview',font=(None,20))
+                self.style.configure('Treeview.Columns',rowheight=50)
 
-	def add_activity(self):
-		pass
+        def create_panel(self):
+        	self.tree = ttk.Treeview(self.w,height=self.height)
+        	self.tree.pack()
+        	self.tree['columns'] = (1,2,3,4,5,6,7)
 
-	def remove_activity(self):
-		pass
+        	for i in range(len(self.days)):
+        		self.tree.heading("#"+str(i),text=self.days[i], anchor='w')
 
-	def modify_mood(self):
-		pass
+        	for i in range(len(self.activities)-1,-1,-1):
+        		self.tree.insert('','0','item'+str(i),text=self.activities[i])
+        		#self.tree.insert('','0','gap'+str(i),text='\n')
+      
 
-	def modify_percent_done(self):
-		pass'''
+        def add_activity(self):
+                pass
+
+        def remove_activity(self):
+                pass
+
+        def modify_mood(self):
+                pass
+
+        def modify_percent_done(self):
+                pass
 
 window = Tk()
+window.geometry(str(width)+'x'+str(height))
 
-tree = Treeview(window,height='15',columns=('emails','passwords'))
-tree.heading("#0", text='Sources', anchor='w')
-tree.column("#0", anchor="w")
-
-treeview = tree
+Panel(window,height,width).create_panel()
 
 window.mainloop()
-
-
-
-''' init -> table, activity_list,
-
-toggle_checks -> add 1 for checked and 0 for unchecked
-
-add_activity(activity_name) -> add a row in the activity section of the table, with checkboxes
-remove_activity(activity_name) -> del a row in the activity section of the table.
-
-modify_mood -> most likely from a selection of predefined moods
-
-modify_percent_done -> from 0 to 100, making sure the user does not write down more or less. '''
