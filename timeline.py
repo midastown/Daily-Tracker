@@ -13,7 +13,7 @@ class Timeline:
         Returns nothing.
         """
         week = []
-        distance = 0
+        distance = 1 * (self.week - 1)                               # different distance for different weeks 
         for i in range(7):
             day = Day(distance)                                      # instance of a new day object
             if day.date.strftime("%A") == "Sunday" and distance < 7:
@@ -26,4 +26,9 @@ class Timeline:
         self.timeline[weekstr] = week                                 # adds a list of days object to the timeline dict
         self.week += 1                                                # increments the self.week variables
 
+
+    def get_remaining(week):
+        norm_week = ["Monday", "Thuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+        length_remaining = 7 - len(week)
+        return norm_week[0:length_remaining]
             
