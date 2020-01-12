@@ -1,6 +1,7 @@
 from tkinter import *
 import tkinter.ttk as ttk
 import tkinter.font as font
+import time
 
 height = 500
 width = 1500
@@ -14,7 +15,7 @@ class Panel:
                 self.activities = ['Activity 1', 'Activity 2', 'Activity 3', 'Activity 4', 'Activity 5']
                 self.days = ['','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
                 self.style = ttk.Style()
-                self.style.configure("Treeview.Heading", font=(None, 15))
+                self.style.configure("Treeview.Heading", font=(None, 17))
                 self.style.configure('Treeview',rowheight=75)
                 self.style.configure('Treeview',font=(None,20))
                 self.style.configure('Treeview.Columns',rowheight=50)
@@ -27,10 +28,12 @@ class Panel:
         	for i in range(len(self.days)):
         		self.tree.heading("#"+str(i),text=self.days[i], anchor='w')
 
+        	self.tree.insert('','0','percent done',text='Percentage Done') 
+        	self.tree.insert('','0','overall mood',text='Overall Mood') 
+
         	for i in range(len(self.activities)-1,-1,-1):
-        		self.tree.insert('','0','item'+str(i),text=self.activities[i])
-        		#self.tree.insert('','0','gap'+str(i),text='\n')
-      
+        		self.tree.insert('','0','activity'+str(i),text=self.activities[i])    
+ 
 
         def add_activity(self):
                 pass
@@ -50,3 +53,4 @@ window.geometry(str(width)+'x'+str(height))
 Panel(window,height,width).create_panel()
 
 window.mainloop()
+
