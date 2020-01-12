@@ -6,6 +6,6 @@ class Day:
         self.activities = None
         self.percent    = None
         self.mood       = None
-        self.date       = datetime.today() + timedelta(days = time_distance)
+        self.date       = date.today() + timedelta(days = time_distance)
 
 
