@@ -3,6 +3,7 @@ import tkinter.ttk as ttk
 import tkinter.font as font
 from timeline import *
 
+
 height = 500
 width = 1625
 
