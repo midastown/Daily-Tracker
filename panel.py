@@ -27,7 +27,7 @@ class Panel:
         	self.tree = ttk.Treeview(self.w,height=self.height)
         	self.tree.pack()
                 print(self.t.timeline)
-        	self.tree['columns'] = [i for i in range(len(self.t.timeline['week'+str(self.week)]))]
+                self.tree['columns'] = [i for i in range(len(self.t.timeline['week'+str(self.week)]))]
 
                 self.tree.heading('#0',text='')
         	for i in range(len(self.t.timeline['week1'])):
