@@ -21,4 +21,10 @@ init -> activity_list = None, Mood = None, Percent = None, current_date
 
 init -> empty dict to store our week datastructure {"week1", [day1, day2, day3, ...], "week2": ...}
         
+::::Metrics:::: (activities, mood, and percent_done are just the metrics that I can think of...)
 
+What if someone wanted to add another metric...
+
+self.metrics = {}
+
+add_metric(metric_string, inital_value) -> self.metrics[metric_string] = [] or 0 or {} or " " or another object if need be.
