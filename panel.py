@@ -25,21 +25,21 @@ class Panel:
                 self.style.configure('Treeview.Columns',rowheight=50)
 
         def create_panel(self):
-        	self.tree = ttk.Treeview(self.w,height=self.height)
-        	self.tree.pack()
-                print(self.t.timeline)
-                self.tree['columns'] = [i for i in range(len(self.t.timeline['week'+str(self.week)]))]
+            self.tree = ttk.Treeview(self.w,height=self.height)
+            self.tree.pack()
+            self.tree['columns'] = [i for i in range(len(self.t.timeline['week'+str(self.week)]))]
 
-                self.tree.heading('#0',text='')
-        	for i in range(len(self.t.timeline['week1'])):
-        		self.tree.heading("#"+str(i+1),text=self.t.timeline['week'+str(self.week)][i].date.strftime('%A'), anchor='w')
 
-        	self.tree.insert('','0','percent done',text='Percentage Done') 
-        	self.tree.insert('','0','overall mood',text='Overall Mood') 
+            self.tree.heading('#0',text='')
+            for i in range(len(self.t.timeline['week1'])):
+                self.tree.heading("#"+str(i+1),text=self.t.timeline['week'+str(self.week)][i].date.strftime('%A'), anchor='w')
 
-        	for i in range(len(self.activities)-1,-1,-1):
-        		self.tree.insert('','0','activity'+str(i),text=self.activities[i]) 
- 
+            self.tree.insert('','0','percent done',text='Percentage Done') 
+            self.tree.insert('','0','overall mood',text='Overall Mood') 
+
+            for i in range(len(self.activities)-1,-1,-1):
+                self.tree.insert('','0','activity'+str(i),text=self.activities[i]) 
+
 
         def add_activity(self):
                 pass
