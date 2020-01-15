@@ -26,9 +26,8 @@ class Timeline:
         self.timeline[weekstr] = week                                 # adds a list of days object to the timeline dict
         self.week += 1                                                # increments the self.week variables
 
-
     def get_remaining(week):
-        norm_week = ["Monday", "Thuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+        norm_week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
         length_remaining = 7 - len(week)
         return norm_week[0:length_remaining]
             
