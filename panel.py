@@ -16,7 +16,7 @@ class Panel:
                 self.w = w
                 self.height = height
                 self.width = width
-                self.activities = ['Activity 1', 'Activity 2', 'Activity 3', 'Activity 4', 'Activity 5','Activity 6']
+                self.activities = [['Activity 1'], ['Activity 2',IntVar()], ['Activity 3',IntVar()], ['Activity 4',IntVar()], ['Activity 5',IntVar()],['Activity 6',IntVar()]]
                 self.days = ['','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
                 self.style = ttk.Style()
                 self.style.configure("Treeview.Heading", font=(None, 17))
@@ -39,9 +39,12 @@ class Panel:
             self.tree.insert('','0','overall mood',text='Overall Mood') 
 
             for i in range(len(self.activities)-1,-1,-1):
-                self.tree.insert('','0','activity'+str(i),text=self.activities[i]) # This inserts the activites starting at the end of the list going to beggining because an activity is displayed,
+                self.tree.insert('','0','activity'+str(i),text=self.activities[i][0]) # This inserts the activites starting at the end of the list going to beggining because an activity is displayed,
                 # Then when the next is inserted the one before is moved down 
 
+        def test(self):
+            self.activities[0].append(IntVar())
+            print(self.activities[0][1])
 
         def add_activity(self):
                 pass
@@ -58,7 +61,8 @@ class Panel:
 window = Tk()
 window.geometry(str(width)+'x'+str(height))
 
-Panel(window,height,width).create_panel()
+p = Panel(window,height,width)#.create_panel()
+p.test()
 
 window.mainloop()
 
