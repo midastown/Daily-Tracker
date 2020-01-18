@@ -1,4 +1,5 @@
 from day import *
+from datetime import date
 
 class Timeline:
 
@@ -13,7 +14,15 @@ class Timeline:
         Returns nothing.
         """
         week = []
-        distance = 1 * (self.week - 1)                               # different distance for different weeks 
+        if not self.timeline:
+            # if its the first week
+            distance = 0
+        else:
+            today = date.today()
+            # basically the math is (difference between the last day in timeline and today) + 1 for the next day
+            distance = (self.timeline["week"+str(self.week-1)][-1].date - today).days + 1
+
+            
         for i in range(7):
             day = Day(distance)                                      # instance of a new day object
             if day.date.strftime("%A") == "Sunday" and distance < 7:
@@ -26,8 +35,9 @@ class Timeline:
         self.timeline[weekstr] = week                                 # adds a list of days object to the timeline dict
         self.week += 1                                                # increments the self.week variables
 
+
     def get_remaining(week):
-        norm_week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+        norm_week = ["Monday", "Thuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
         length_remaining = 7 - len(week)
         return norm_week[0:length_remaining]
             
