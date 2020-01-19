@@ -24,6 +24,11 @@ class Panel:
                 self.style.configure('Treeview',font=(None,20))
                 self.style.configure('Treeview.Columns',rowheight=50)
 
+                '''for i in range(len(self.t.timeline['week1'])):
+                    self.tree.heading("#"+str(i+1),text=self.t.timeline['week'+str(self.week)][i].date.strftime('%A'), anchor='w')
+                    for i in range(number_of activities):   # in this case 6
+                        self.tree.insert('','0',CheckButton(self.w, state=ACTIVE).pack())     # or something like this  '''
+
         def create_panel(self):
             self.tree = ttk.Treeview(self.w,height=self.height)
             self.tree.pack()
@@ -34,15 +39,14 @@ class Panel:
             for i in range(len(self.t.timeline['week1'])):
                 self.tree.heading("#"+str(i+1),text=self.t.timeline['week'+str(self.week)][i].date.strftime('%A'), anchor='w')  # This line cycles through all the pre defined columns which
                 # Are named 1 - 7 and sets each name to the appropriate day of the week
+                
 
             self.tree.insert('','0','percent done',text='Percentage Done') 
             self.tree.insert('','0','overall mood',text='Overall Mood') 
 
             for i in range(len(self.activities)-1,-1,-1):
-                self.tree.insert('','0','activity'+str(i),text=self.activities[i][0]) # This inserts the activites starting at the end of the list going to beggining because an activity is displayed,
+                self.tree.insert('','0','activity'+str(i),text=self.activities[i][0],values=[Checkbutton(self.w,state=ACTIVE).pack() for j in range(len(self.t.timeline['week'+str(self.week)]))])
                 # Then when the next is inserted the one before is moved down 
-
-            Checkbutton(self.w, text="male", variable=self.activities[0][1]).pack(side=RIGHT)
 
         def test(self):
             pass
