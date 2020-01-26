@@ -16,14 +16,13 @@ class Panel:
         self.heigth = heigth
         self.width  = width
         self.week = 1
-        self.activities = [['Activity 1', 'Activity 2', 'Activity 3', 'Activity 4', 'Activity 5']]
+        self.activities = ['Activity 1', 'Activity 2', 'Activity 3', 'Activity 4', 'Activity 5']
         self.days = []
         self.t = Timeline()
         self.t.add_week()
-        self.days.append([])
         
-        for i in range(len(self.t.timeline['week'+str(self.week)])):
-            self.days[self.week-1].append(self.t.timeline['week'+str(self.week)][i].date.strftime("%A"))
+        for i in self.t.timeline["week"+str(self.week)]:
+            self.days.append(i.date.strftime("%A"))
         print(self.days)
         # The way I do the grid, the fonts "need??" to be initiated when adding to the cells. Not sure about the
         # "need" but this is the way I found working, so maybe you can do better.
@@ -55,26 +54,8 @@ class Panel:
         tab = Frame(tablayout)
         tab.pack(fill="both")
 
-        for i in range(len(self.activities[self.week-1])+1):              # for rows in activities
-            for j in range(len(self.days[self.week-1])+1):          # for cols in days
-                if i == 0 and j == 0:                                  # if its first cell, add empty cell
-                    label = Label(tab, text=" ")
-                    label.grid(row=i, column=j)                        # this specifies where in the grid
-                    tab.grid_columnconfigure(j, weight=1)              
-                    # this last line makes the width of the column responsive to change in width of the window
-                elif i == 0:           # adding the name of the day
-                    label = Label(tab, text=self.days[self.week-1][j-1])
-                    label.grid(row=i, column=j)
-                    tab.grid_columnconfigure(j, weight=1)
-                elif j == 0:           # adding the name of the activity
-                    label = Label(tab, text=self.activities[self.week-1][i-1])
-                    label.grid(row=i, column=j)
-                    tab.grid_columnconfigure(j, weight=1)
-                else:                  # adding the checkboxes
-                    label = Checkbutton(tab) 
-                    label.grid(row=i, column=j)
-                    tab.grid_columnconfigure(j, weight=1)
-        
+        self.show_table(self.week, tab)
+
         he = Button(tab,text='hello',command=self.add_week)
         he.grid(row=10,column=0)
         # Oh crap there is no pack in this for loop at all, yeah man never
@@ -85,6 +66,42 @@ class Panel:
        
         tablayout.pack(fill="both") # once everything is done now you pack the tablayout
 
+
+    def show_table(self, week, tab, remaining=None):
+        """
+        This is the same mechanics that was working in create panel, now refactored in its own function
+        
+        """
+        if len(self.days) < 7:
+            hybrid_week = self.t.get_remaining(self.days) + self.days
+
+        for i in range(len(self.activities)+1):              # for rows in activities
+            for j in range(len(hybrid_week)+1):          # for cols in days
+                if i == 0 and j == 0:                                  # if its first cell, add empty cell
+                    label = Label(tab, text=" ")
+                    label.grid(row=i, column=j)                        # this specifies where in the grid
+                    tab.grid_columnconfigure(j, weight=1)              
+                    # this last line makes the width of the column responsive to change in width of the window
+                elif i == 0:           # adding the name of the day
+                    label = Label(tab, text=hybrid_week[j-1])
+                    label.grid(row=i, column=j)
+                    tab.grid_columnconfigure(j, weight=1)
+                elif j == 0:           # adding the name of the activity
+                    label = Label(tab, text=self.activities[i-1])
+                    label.grid(row=i, column=j)
+                    tab.grid_columnconfigure(j, weight=1)
+                else:                  # adding the checkboxes
+                    if hybrid_week[j-1] in self.days:
+                        label = Checkbutton(tab) 
+                        label.grid(row=i, column=j)
+                        tab.grid_columnconfigure(j, weight=1)
+                    else:
+                        label = Checkbutton(tab, state=DISABLED) 
+                        label.grid(row=i, column=j)
+                        tab.grid_columnconfigure(j, weight=1)
+
+
+        
     def add_week(self):
         pass
 
