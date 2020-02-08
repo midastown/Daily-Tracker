@@ -36,8 +36,8 @@ class Timeline:
         self.week += 1                                                # increments the self.week variables
 
 
-    def get_remaining(self, week):
+    def get_remaining(self, week_length):
         norm_week = ["Monday", "Thuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-        length_remaining = 7 - len(week)
+        length_remaining = 7 - week_length
         return norm_week[0:length_remaining]
             
