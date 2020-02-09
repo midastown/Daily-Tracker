@@ -8,19 +8,20 @@ class Timeline:
         self.week = 1
         
 
-    def add_week(self):
+    def add_week(self, distance=None):
         """
         Creates a new instance of a week and store it into the timeline
         Returns nothing.
         """
         week = []
-        if not self.timeline:
-            # if its the first week
-            distance = 0
-        else:
-            today = date.today()
-            # basically the math is (difference between the last day in timeline and today) + 1 for the next day
-            distance = (self.timeline["week"+str(self.week-1)][-1].date - today).days + 1
+        if not distance:
+            if not self.timeline:
+                # if its the first week
+                distance = 0
+            else:
+                today = date.today()
+                # basically the math is (difference between the last day in timeline and today) + 1 for the next day
+                distance = (self.timeline["week"+str(self.week-1)][-1].date - today).days + 1
 
             
         for i in range(7):
