@@ -71,10 +71,9 @@ class Panel:
         tablayout.pack(fill="both") # once everything is done now you pack the tablayout
 
 
-    def show_table(self, week, tab, remaining=None):
+    def show_table(self, week, tab):
         """
-        This is the same mechanics that was working in create panel, now refactored in its own function
-        
+        Creates a Table/Grid showing days, activities, checkboxes, ...
         """
         if len(week) < 7:
             current_week = [i.date.strftime("%A") for i in week]
@@ -83,39 +82,33 @@ class Panel:
             hybrid_week = []
 
         for i in range(len(self.activities)+1):              # for rows in activities
-            for j in range(len(self.days)+1):          # for cols in days
+            for j in range(len(self.days)+1):                # for cols in days
                 if i == 0 and j == 0:                                  # if its first cell, add empty cell
-                    label = Label(tab, text=" ")
-                    label.grid(row=i, column=j)                        # this specifies where in the grid
-                    tab.grid_columnconfigure(j, weight=1)              
-                    # this last line makes the width of the column responsive to change in width of the window
-                elif i == 0:           # adding the name of the day
-                    label = Label(tab, text=self.days[j-1])
-                    label.grid(row=i, column=j)
-                    tab.grid_columnconfigure(j, weight=1)
-                elif j == 0:           # adding the name of the activity
-                    label = Label(tab, text=self.activities[i-1])
-                    label.grid(row=i, column=j)
-                    tab.grid_columnconfigure(j, weight=1)
-                else:                  # adding the checkboxes
+                    self.labeling(tab, i, j, Label(tab, text=" "))
+                elif i == 0:                                           # adding the name of the day
+                    self.labeling(tab, i, j, Label(tab, text=self.days[j-1]))
+                elif j == 0:                                           # adding the name of the activity
+                    self.labeling(tab, i, j, Label(tab, text=self.activities[i-1]))
+                else:                                                  # adding the checkboxes
                     if hybrid_week:
                         if hybrid_week[j-1] in current_week:
-                            label = Checkbutton(tab) 
-                            label.grid(row=i, column=j)
-                            tab.grid_columnconfigure(j, weight=1)
+                            self.labeling(tab, i, j, Checkbutton(tab))
                         else:
-                            label = Checkbutton(tab, state=DISABLED) 
-                            label.grid(row=i, column=j)
-                            tab.grid_columnconfigure(j, weight=1)
+                            self.labeling(tab, i, j, Checkbutton(tab, state=DISABLED))
                     else:
-                        label = Checkbutton(tab) 
-                        label.grid(row=i, column=j)
-                        tab.grid_columnconfigure(j, weight=1)
+                        self.labeling(tab, i, j, Checkbutton(tab))
 
 
-
-
+    def labeling(self, tab, i, j, element):
+        """
+        Does the labeling for show_table
+        """
+        label = element
+        label.grid(row=i, column=j)                        # this specifies where in the grid
+        tab.grid_columnconfigure(j, weight=1)              
+        # this last line makes the width of the column responsive to change in width of the window
         
+
     def add_week(self):
         pass
 
