@@ -28,3 +28,15 @@ What if someone wanted to add another metric...
 self.metrics = {}
 
 add_metric(metric_string, inital_value) -> self.metrics[metric_string] = [] or 0 or {} or " " or another object if need be.
+
+
+::::::STATS::::::
+
+It seems difficult to merge a simple graph of mood tracking with another simple graph of habits tracking, the most simple solution is to use a graph with 3 variables, 2 in the Y-axis (mood and activities) and 1 in the X-axis (time)
+
+
+
+
+
+
+
