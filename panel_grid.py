@@ -56,8 +56,7 @@ class Panel:
         next_week.pack(side=RIGHT)
         self.activityEntry = Entry(week_modifs)# entry for new activity
         self.activityEntry.pack(side=LEFT)
-        eVar = self.activityEntry.get()
-        b = Button(week_modifs,command=lambda: self.add_activity(eVar, table),text='Submit')
+        b = Button(week_modifs,command=lambda: self.add_activity(table),text='Submit')
         b.pack(side=LEFT)
         last_week = Button(week_modifs,text='last',command= lambda: self.last_week(table))
         last_week.pack(side=LEFT)
@@ -97,18 +96,18 @@ class Panel:
                 elif j == 0:                                           # adding the name of the activity
                     self.labeling(tab, i, j, Label(tab, text=self.activities[i-1]))
                 else:                                                  # adding the checkboxes
-                      # if week[j-1].activities[i-1][1] == 0:
-                      #     var = Intvar
-                      #     week[j-1].activities[i-1][1] = var
-                      # else:
-                      #     var = week[j-1].activities[i-1][1]
+                    if week[j-1].activities[i-1][1] == 0:
+                      var = Intvar()
+                      week[j-1].activities[i-1][1] = var # week[0].activities[]
+                    else:
+                      var = week[j-1].activities[i-1][1]
                     if hybrid_week:
                         if hybrid_week[j-1] in current_week:
-                            self.labeling(tab, i, j, Checkbutton(tab))
+                            self.labeling(tab, i, j, Checkbutton(tab, variable=var))
                         else:
                             self.labeling(tab, i, j, Checkbutton(tab, state=DISABLED))
                     else:
-                        self.labeling(tab, i, j, Checkbutton(tab))
+                        self.labeling(tab, i, j, Checkbutton(tab, variable=var))
 
 
     def labeling(self, tab, i, j, element):
@@ -124,8 +123,10 @@ class Panel:
     def add_week(self):
         pass
 
-    def add_activity(self, activity, table):
-        self.t.add_activity(activity)
+    def add_activity(self,table):
+        activity = self.activityEntry.get()
+        week = "week" + str(self.week)
+        self.t.add_activity(week,activity)
         self.show_table(self.t.timeline["week" + str(self.week)], table)
 
     def remove_activity(self):

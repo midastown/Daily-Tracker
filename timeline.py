@@ -49,7 +49,8 @@ class Timeline:
         for i in self.t.timeline[week]:
             if i.activities:
                 i.activities.append([activity, 0])
-            else:
+            else:                                       # activities = [[activity1, 0], [activity2, 0],...]
+                                                        # activities = [[activity1, IntVar()], [activity2, IntVar()], ...]
                 i.activities = [[activity, 0]]
 
     def get_activities_names(self, week):
