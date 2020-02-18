@@ -52,13 +52,13 @@ class Panel:
 
         week_modifs = Frame(tab)
         week_modifs.pack(side=BOTTOM)
-        next_week = Button(week_modifs,text='next',command= lambda: self.next_week(table))
+        next_week = Button(week_modifs,text='Next Week',command= lambda: self.next_week(table))
         next_week.pack(side=RIGHT)
-        self.activityEntry = Entry(week_modifs)# entry for new activity
-        self.activityEntry.pack(side=LEFT)
-        b = Button(week_modifs,command=lambda: self.add_activity(table),text='Submit')
+        activityEntry = Entry(week_modifs)         # entry for new activity
+        activityEntry.pack(side=LEFT)
+        b = Button(week_modifs,command=lambda: self.add_activity(activityEntry.get(), table),text='Add Activity') # submit button
         b.pack(side=LEFT)
-        last_week = Button(week_modifs,text='last',command= lambda: self.last_week(table))
+        last_week = Button(week_modifs,text='Last Week',command= lambda: self.last_week(table))
         last_week.pack(side=LEFT)
 
 
@@ -79,35 +79,27 @@ class Panel:
         """
         Creates a Table/Grid showing days, activities, checkboxes, ...
         """
-        if len(week) < 7:
-            current_week = [i.date.strftime("%A") for i in week]
-            hybrid_week = self.t.get_remaining(len(week)) + current_week
-        else:
-            hybrid_week = []
-
+        days = self.t.get_days_names(week)
         activities = self.t.get_activities_names(week)
-
+        
         for i in range(len(activities)+1):              # for rows in activities
-            for j in range(len(self.days)+1):                # for cols in days
+            for j in range(len(days)+1):                # for cols in days
                 if i == 0 and j == 0:                                  # if its first cell, add empty cell
                     self.labeling(tab, i, j, Label(tab, text=" "))
                 elif i == 0:                                           # adding the name of the day
-                    self.labeling(tab, i, j, Label(tab, text=self.days[j-1]))
+                    print( "This is j: " + str(j) + ", this is i: " + str(i))
+                    self.labeling(tab, i, j, Label(tab, text=days[j-1]))
+                elif activities[0] == " ":                             # if there are no activities 
+                    self.labeling(tab, i, j, Label(tab, text=" "))
                 elif j == 0:                                           # adding the name of the activity
-                    self.labeling(tab, i, j, Label(tab, text=self.activities[i-1]))
+                    self.labeling(tab, i, j, Label(tab, text=activities[i-1]))
                 else:                                                  # adding the checkboxes
                     if week[j-1].activities[i-1][1] == 0:
-                      var = Intvar()
-                      week[j-1].activities[i-1][1] = var # week[0].activities[]
+                        var = IntVar()
+                        week[j-1].activities[i-1][1] = var # week[0].activities[]
                     else:
-                      var = week[j-1].activities[i-1][1]
-                    if hybrid_week:
-                        if hybrid_week[j-1] in current_week:
-                            self.labeling(tab, i, j, Checkbutton(tab, variable=var))
-                        else:
-                            self.labeling(tab, i, j, Checkbutton(tab, state=DISABLED))
-                    else:
-                        self.labeling(tab, i, j, Checkbutton(tab, variable=var))
+                        var = week[j-1].activities[i-1][1]
+                    self.labeling(tab, i, j, Checkbutton(tab, variable=var))
 
 
     def labeling(self, tab, i, j, element):
@@ -123,10 +115,9 @@ class Panel:
     def add_week(self):
         pass
 
-    def add_activity(self,table):
-        activity = self.activityEntry.get()
-        week = "week" + str(self.week)
-        self.t.add_activity(week,activity)
+    def add_activity(self, activity, table):
+        week = self.t.timeline["week" + str(self.week)]
+        self.t.add_activity(week, activity)
         self.show_table(self.t.timeline["week" + str(self.week)], table)
 
     def remove_activity(self):
