@@ -48,14 +48,19 @@ class Panel:
         table.pack(fill="both")
 
         self.show_table(self.t.timeline["week" + str(self.week)], table)
+        
 
         week_modifs = Frame(tab)
         week_modifs.pack(side=BOTTOM)
         next_week = Button(week_modifs,text='next',command= lambda: self.next_week(table))
         next_week.pack(side=RIGHT)
+        self.activityEntry = Entry(week_modifs)# entry for new activity
+        self.activityEntry.pack(side=LEFT)
+        eVar = self.activityEntry.get()
+        b = Button(week_modifs,command=lambda: self.add_activity(eVar, table),text='Submit')
+        b.pack(side=LEFT)
         last_week = Button(week_modifs,text='last',command= lambda: self.last_week(table))
         last_week.pack(side=LEFT)
-    
 
 
         tablayout.add(tab, text="Current Week")  # once its grided this add it to the new tab under a different title 
@@ -81,7 +86,9 @@ class Panel:
         else:
             hybrid_week = []
 
-        for i in range(len(self.activities)+1):              # for rows in activities
+        activities = self.t.get_activities_names(week)
+
+        for i in range(len(activities)+1):              # for rows in activities
             for j in range(len(self.days)+1):                # for cols in days
                 if i == 0 and j == 0:                                  # if its first cell, add empty cell
                     self.labeling(tab, i, j, Label(tab, text=" "))
@@ -90,6 +97,11 @@ class Panel:
                 elif j == 0:                                           # adding the name of the activity
                     self.labeling(tab, i, j, Label(tab, text=self.activities[i-1]))
                 else:                                                  # adding the checkboxes
+                      # if week[j-1].activities[i-1][1] == 0:
+                      #     var = Intvar
+                      #     week[j-1].activities[i-1][1] = var
+                      # else:
+                      #     var = week[j-1].activities[i-1][1]
                     if hybrid_week:
                         if hybrid_week[j-1] in current_week:
                             self.labeling(tab, i, j, Checkbutton(tab))
@@ -112,8 +124,9 @@ class Panel:
     def add_week(self):
         pass
 
-    def add_activity(self):
-        pass
+    def add_activity(self, activity, table):
+        self.t.add_activity(activity)
+        self.show_table(self.t.timeline["week" + str(self.week)], table)
 
     def remove_activity(self):
         pass

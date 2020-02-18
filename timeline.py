@@ -42,3 +42,37 @@ class Timeline:
         length_remaining = 7 - week_length
         return norm_week[0:length_remaining]
             
+    def add_activity(self, week, activity):
+        """
+        instantiate an activity in each day, or appends to an already instantiated variable
+        """
+        for i in self.t.timeline[week]:
+            if i.activities:
+                i.activities.append([activity, 0])
+            else:
+                i.activities = [[activity, 0]]
+
+    def get_activities_names(self, week):
+
+        activities = week[0].activities
+        if activities:                                        # if activities != None
+            activity_names = []
+            for i in activities:
+                activity_name.append(i[0])
+            return activity_names
+        else:
+            return [" "]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
