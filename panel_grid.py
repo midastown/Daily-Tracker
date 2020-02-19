@@ -20,7 +20,6 @@ class Panel:
         self.days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
         self.t = Timeline()
         self.t.add_week()
-        self.activityCount = 0
         
         # The way I do the grid, the fonts "need??" to be initiated when adding to the cells. Not sure about the
         # "need" but this is the way I found working, so maybe you can do better.
@@ -95,7 +94,7 @@ class Panel:
                 elif activities[0] == " ":                             # if there are no activities 
                     self.labeling(tab, i, j, Label(tab, text=" "))
                 elif j == 0:                                           # adding the name of the activity
-                    self.labeling(tab, i, j, Label(tab, text=str(i) + ' ' + activities[i-1]))
+                    self.labeling(tab, i, j, Label(tab, text=str(i) + ' - ' + activities[i-1]))
                 else:                                                  # adding the checkboxes
                     if week[j-1].activities[i-1][1] == 0:
                         var = IntVar()
@@ -119,13 +118,11 @@ class Panel:
         pass
 
     def add_activity(self, activity, table):
-        self.activityCount += 1
         week = self.t.timeline["week" + str(self.week)]
         self.t.add_activity(week, activity)
         self.show_table(self.t.timeline["week" + str(self.week)], table)
 
     def remove_activity(self, activity, table):
-        self.activityCount -= 1
         week = self.t.timeline['week' + str(self.week)]
         activityNum = int(activity) - 1
         self.t.remove_activity(week,activityNum)
