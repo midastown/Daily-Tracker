@@ -129,3 +129,4 @@ dmypy.json
 # Temporary Project Initializtion Files
 proj_init.py
 .DS_Store
+timeline.data
