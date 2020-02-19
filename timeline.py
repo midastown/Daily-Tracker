@@ -54,6 +54,10 @@ class Timeline:
                                                         # activities = [[activity1, IntVar()], [activity2, IntVar()], ...]
                 i.activities = [[activity, 0]]
 
+    def remove_activity(self, week, activityNum):
+        for i in week:
+            del i.activities[activityNum]
+
     def get_activities_names(self, week):
 
         activities = week[0].activities

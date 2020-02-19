@@ -57,7 +57,7 @@ if __name__ == "__main__":
     t = loadTimeline(found)
     cleanUpTimeline(t)
     saveTimeline(t)
-    Panel(window, height, width, t).create_panel()
+    Panel(window, height, width).create_panel()
 
     window.mainloop()
 
