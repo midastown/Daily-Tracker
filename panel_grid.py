@@ -20,6 +20,7 @@ class Panel:
         self.days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
         self.t = Timeline()
         self.t.add_week()
+        self.activityCount = 0
         
         # The way I do the grid, the fonts "need??" to be initiated when adding to the cells. Not sure about the
         # "need" but this is the way I found working, so maybe you can do better.
@@ -58,6 +59,8 @@ class Panel:
         activityEntry.pack(side=LEFT)
         b = Button(week_modifs,command=lambda: self.add_activity(activityEntry.get(), table),text='Add Activity') # submit button
         b.pack(side=LEFT)
+        b = Button(week_modifs,command=lambda: self.remove_activity(activityEntry.get(),table),text='Remove Activity')
+        b.pack(side=LEFT)
         last_week = Button(week_modifs,text='Last Week',command= lambda: self.last_week(table))
         last_week.pack(side=LEFT)
 
@@ -81,18 +84,18 @@ class Panel:
         """
         days = self.t.get_days_names(week)
         activities = self.t.get_activities_names(week)
-        
+
         for i in range(len(activities)+1):              # for rows in activities
             for j in range(len(days)+1):                # for cols in days
                 if i == 0 and j == 0:                                  # if its first cell, add empty cell
                     self.labeling(tab, i, j, Label(tab, text=" "))
                 elif i == 0:                                           # adding the name of the day
-                    print( "This is j: " + str(j) + ", this is i: " + str(i))
+                    #print( "This is j: " + str(j) + ", this is i: " + str(i))
                     self.labeling(tab, i, j, Label(tab, text=days[j-1]))
                 elif activities[0] == " ":                             # if there are no activities 
                     self.labeling(tab, i, j, Label(tab, text=" "))
                 elif j == 0:                                           # adding the name of the activity
-                    self.labeling(tab, i, j, Label(tab, text=activities[i-1]))
+                    self.labeling(tab, i, j, Label(tab, text=str(i) + ' ' + activities[i-1]))
                 else:                                                  # adding the checkboxes
                     if week[j-1].activities[i-1][1] == 0:
                         var = IntVar()
@@ -116,12 +119,18 @@ class Panel:
         pass
 
     def add_activity(self, activity, table):
+        self.activityCount += 1
         week = self.t.timeline["week" + str(self.week)]
         self.t.add_activity(week, activity)
         self.show_table(self.t.timeline["week" + str(self.week)], table)
 
-    def remove_activity(self):
-        pass
+    def remove_activity(self, activity, table):
+        self.activityCount -= 1
+        week = self.t.timeline['week' + str(self.week)]
+        activityNum = int(activity) - 1
+        self.t.remove_activity(week,activityNum)
+        self.clear_frame(table)
+        self.show_table(self.t.timeline['week' + str(self.week)], table)
 
     def modify_mood(self):
         pass
@@ -137,6 +146,9 @@ class Panel:
             self.t.add_week()
         
         self.week += 1
+
+        self.clear_frame(table)
+
         self.show_table(self.t.timeline["week" + str(self.week)], table)
 
 
@@ -148,9 +160,14 @@ class Panel:
             return
 
         self.week -= 1
+
+        self.clear_frame(table)
+
         self.show_table(self.t.timeline["week" + str(self.week)], table)
 
-
+    def clear_frame(self, table):
+        for widget in table.winfo_children():
+            widget.destroy()
 
 Panel(window, height, width).create_panel()
 
