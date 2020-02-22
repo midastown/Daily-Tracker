@@ -10,7 +10,7 @@ def cleanUpTimeline(t):
     if t.week == 1:
         t.add_week()
     else:
-        last_day = t.timeline["week" + str(t.week - 1)][6].date
+        last_day = t.timeline["week" + str(t.week - 1)][-1].date
         distance = (last_day - date.today()).days + 1
         
         while distance < 0:
@@ -21,7 +21,7 @@ def saveTimeline(t):
     """
     This will save the timeline object in timeline.data.
     """
-    with open('timeline.data', 'wb') as f:
+    with open('timeline-data/timeline.data', 'wb') as f:
         pickle.dump(t, f)
 
 def loadTimeline(found):
@@ -31,7 +31,7 @@ def loadTimeline(found):
     Returns: a Timeline Object
     """
     if found:
-        with open('timeline.data', 'rb') as f:
+        with open('timeline-data/timeline.data', 'rb') as f:
             t = pickle.load(f)
     else:
         t = Timeline()
@@ -48,7 +48,7 @@ if __name__ == "__main__":
     window.geometry(str(width) + "x" + str(height))
     
     try:
-        f = open("timeline.data")
+        f = open("timeline-data/timeline.data")
         f.close()
         found = True
     except FileNotFoundError:
@@ -57,7 +57,7 @@ if __name__ == "__main__":
     t = loadTimeline(found)
     cleanUpTimeline(t)
     saveTimeline(t)
-    Panel(window, height, width).create_panel()
+    Panel(window, height, width, t).create_panel()
 
     window.mainloop()
 

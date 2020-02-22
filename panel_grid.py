@@ -2,25 +2,26 @@ from tkinter import *
 from tkinter.ttk import Notebook
 from timeline import *
 
-width  = 800
-height = 500
+#   width  = 800
+#   height = 500
 
-window = Tk()
-window.title("Daily Tracker")
-window.geometry(str(width) + "x" + str(height))
+#   window = Tk()
+#   window.title("Daily Tracker")
+#   window.geometry(str(width) + "x" + str(height))
 
 class Panel:
 
-    def __init__(self, window, heigth, width):
+    def __init__(self, window, heigth, width, t):
         self.window = window
         self.heigth = heigth
         self.width  = width
         self.week = 1
-        self.activities = ['Activity 1', 'Activity 2', 'Activity 3', 'Activity 4', 'Activity 5']
-        self.days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-        self.t = Timeline()
-        self.t.add_week()
-        
+        self.t = t
+        #   self.activities = ['Activity 1', 'Activity 2', 'Activity 3', 'Activity 4', 'Activity 5']
+        #   self.days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+        #   self.t = Timeline()
+        #   self.t.add_week()
+            
         # The way I do the grid, the fonts "need??" to be initiated when adding to the cells. Not sure about the
         # "need" but this is the way I found working, so maybe you can do better.
 
@@ -36,7 +37,7 @@ class Panel:
             https://wiki.tcl-lang.org/page/tkinter.Notebook
         """
         # Main Frame creation
-        frame1 = Frame(window)
+        frame1 = Frame(self.window)
         frame1.pack(fill="both")
         tablayout = Notebook(frame1)
  
@@ -166,6 +167,6 @@ class Panel:
         for widget in table.winfo_children():
             widget.destroy()
 
-Panel(window, height, width).create_panel()
+#   Panel(window, height, width).create_panel()
 
-window.mainloop()
+#   window.mainloop()
