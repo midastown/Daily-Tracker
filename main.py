@@ -21,8 +21,8 @@ def saveTimeline(t):
     """
     This will save the timeline object in timeline.data.
     """
-    with open('timeline-data/timeline.data', 'wb') as f:
-        pickle.dump(t, f)
+    pickle.dump(t, open('timeline-data/timeline.data', 'wb'), 4)
+
 
 def loadTimeline(found):
     """
@@ -31,8 +31,8 @@ def loadTimeline(found):
     Returns: a Timeline Object
     """
     if found:
-        with open('timeline-data/timeline.data', 'rb') as f:
-            t = pickle.load(f)
+        t = pickle.load(open('timeline-data/timeline.data', 'rb')) 
+        print(t.timeline)
     else:
         t = Timeline()
 

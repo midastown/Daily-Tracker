@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter.ttk import Notebook
 from timeline import *
-
+from main import *
 #   width  = 800
 #   height = 500
 
@@ -55,15 +55,16 @@ class Panel:
         week_modifs.pack(side=BOTTOM)
         next_week = Button(week_modifs,text='Next Week',command= lambda: self.next_week(table))
         next_week.pack(side=RIGHT)
-        activityEntry = Entry(week_modifs)         # entry for new activity
+        activityEntry = Entry(week_modifs)         
         activityEntry.pack(side=LEFT)
-        b = Button(week_modifs,command=lambda: self.add_activity(activityEntry.get(), table),text='Add Activity') # submit button
+        b = Button(week_modifs,command=lambda: self.add_activity(activityEntry.get(), table),text='Add Activity')
         b.pack(side=LEFT)
         b = Button(week_modifs,command=lambda: self.remove_activity(activityEntry.get(),table),text='Remove Activity')
         b.pack(side=LEFT)
         last_week = Button(week_modifs,text='Last Week',command= lambda: self.last_week(table))
         last_week.pack(side=LEFT)
-
+        save = Button(week_modifs, text="Save", command= lambda: self.save()) 
+        save.pack(side=LEFT)
 
         tablayout.add(tab, text="Current Week")  # once its grided this add it to the new tab under a different title 
        
@@ -77,6 +78,9 @@ class Panel:
       
         tablayout.pack(fill="both") # once everything is done now you pack the tablayout
 
+    def save(self):
+        data = self.t
+        pickle.dump(data, open('timeline-data/timeline.data', 'wb'), 4)
 
     def show_table(self, week, tab):
         """
@@ -97,12 +101,15 @@ class Panel:
                 elif j == 0:                                           # adding the name of the activity
                     self.labeling(tab, i, j, Label(tab, text=str(i) + ' - ' + activities[i-1]))
                 else:                                                  # adding the checkboxes
-                    if week[j-1].activities[i-1][1] == 0:
-                        var = IntVar()
-                        week[j-1].activities[i-1][1] = var # week[0].activities[]
-                    else:
-                        var = week[j-1].activities[i-1][1]
-                    self.labeling(tab, i, j, Checkbutton(tab, variable=var))
+                    # TODO: implement the check object instead of intvar
+
+                    #if week[j-1].activities[i-1][1] == 0:
+                       # var = IntVar()
+                       # week[j-1].activities[i-1][1] = var # week[0].activities[]
+                    #else:
+                        #var = week[j-1].activities[i-1][1]
+
+                    self.labeling(tab, i, j, Checkbutton(tab))
 
 
     def labeling(self, tab, i, j, element):

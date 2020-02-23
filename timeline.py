@@ -1,11 +1,16 @@
 from day import *
+import pickle
 from datetime import date
 
 class Timeline:
 
-    def __init__(self):
-        self.timeline = {}
-        self.week = 1
+    def __init__(self, timeline=None, week=None):
+        if not timeline and not week:
+            self.timeline = {}
+            self.week = 1
+        else:
+            self.timeline = timeline
+            self.week = week
         
 
     def add_week(self, distance=None):
@@ -68,7 +73,6 @@ class Timeline:
             return activity_names
         else:
             return [" "]
-
 
 
 
