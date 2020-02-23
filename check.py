@@ -9,3 +9,7 @@ class Check():
             self.value = 1
         else:
             self.value = 0
+
+    def set_value(self, intvar):
+        intvar.set(self.value)
+        return intvar

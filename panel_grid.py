@@ -17,14 +17,6 @@ class Panel:
         self.width  = width
         self.week = 1
         self.t = t
-        #   self.activities = ['Activity 1', 'Activity 2', 'Activity 3', 'Activity 4', 'Activity 5']
-        #   self.days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-        #   self.t = Timeline()
-        #   self.t.add_week()
-            
-        # The way I do the grid, the fonts "need??" to be initiated when adding to the cells. Not sure about the
-        # "need" but this is the way I found working, so maybe you can do better.
-
 
     def create_panel(self):
         """
@@ -102,15 +94,18 @@ class Panel:
                     self.labeling(tab, i, j, Label(tab, text=str(i) + ' - ' + activities[i-1]))
                 else:                                                  # adding the checkboxes
                     # TODO: implement the check object instead of intvar
+                    print(week[j-1].activities[i-1][1])
 
-                    #if week[j-1].activities[i-1][1] == 0:
-                       # var = IntVar()
-                       # week[j-1].activities[i-1][1] = var # week[0].activities[]
-                    #else:
-                        #var = week[j-1].activities[i-1][1]
+                    element = Checkbutton(tab, command= lambda: self.toggle(i, j))
+                    if week[j-1].activities[i-1][1] == 1:
+                        element.select()                 
+                    self.labeling(tab, i, j, element)
 
-                    self.labeling(tab, i, j, Checkbutton(tab))
-
+    def toggle(self, i, j):
+        if self.t.timeline["week" + str(self.week)][j-1].activities[i-1][1] == 1:
+            self.t.timeline["week" + str(self.week)][j-1].activities[i-1][1] = 0
+        else:
+            self.t.timeline["week" + str(self.week)][j-1].activities[i-1][1] = 1
 
     def labeling(self, tab, i, j, element):
         """
