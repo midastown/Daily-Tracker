@@ -2,12 +2,12 @@ from tkinter import *
 from tkinter.ttk import Notebook
 from timeline import *
 from main import *
-#   width  = 800
-#   height = 500
+# width  = 800
+# height = 500
 
-#   window = Tk()
-#   window.title("Daily Tracker")
-#   window.geometry(str(width) + "x" + str(height))
+# window = Tk()
+# window.title("Daily Tracker")
+# window.geometry(str(width) + "x" + str(height))
 
 class Panel:
 
@@ -17,6 +17,8 @@ class Panel:
         self.width  = width
         self.week = 1
         self.t = t
+        self.e = {}          # stores IntVars
+        self.n = 0
 
     def create_panel(self):
         """
@@ -80,32 +82,26 @@ class Panel:
         """
         days = self.t.get_days_names(week)
         activities = self.t.get_activities_names(week)
+        self.e = {}
+        self.n = 0
 
         for i in range(len(activities)+1):              # for rows in activities
             for j in range(len(days)+1):                # for cols in days
                 if i == 0 and j == 0:                                  # if its first cell, add empty cell
                     self.labeling(tab, i, j, Label(tab, text=" "))
                 elif i == 0:                                           # adding the name of the day
-                    #print( "This is j: " + str(j) + ", this is i: " + str(i))
                     self.labeling(tab, i, j, Label(tab, text=days[j-1]))
                 elif activities[0] == " ":                             # if there are no activities 
                     self.labeling(tab, i, j, Label(tab, text=" "))
                 elif j == 0:                                           # adding the name of the activity
                     self.labeling(tab, i, j, Label(tab, text=str(i) + ' - ' + activities[i-1]))
                 else:                                                  # adding the checkboxes
-                    # TODO: implement the check object instead of intvar
-                    print(week[j-1].activities[i-1][1])
-
-                    element = Checkbutton(tab, command= lambda: self.toggle(i, j))
-                    if week[j-1].activities[i-1][1] == 1:
-                        element.select()                 
+                    c = week[j-1].activities[i-1][1]
+                    self.e["e"+str(self.n)] = IntVar(value=c.get_value())
+                    element = Checkbutton(tab, variable=self.e["e"+str(self.n)], command=lambda check=c : check.toggle())
                     self.labeling(tab, i, j, element)
+                    self.n += 1
 
-    def toggle(self, i, j):
-        if self.t.timeline["week" + str(self.week)][j-1].activities[i-1][1] == 1:
-            self.t.timeline["week" + str(self.week)][j-1].activities[i-1][1] = 0
-        else:
-            self.t.timeline["week" + str(self.week)][j-1].activities[i-1][1] = 1
 
     def labeling(self, tab, i, j, element):
         """
@@ -144,11 +140,8 @@ class Panel:
         """
         if ("week" + str(self.week + 1)) not in self.t.timeline:
             self.t.add_week()
-        
         self.week += 1
-
         self.clear_frame(table)
-
         self.show_table(self.t.timeline["week" + str(self.week)], table)
 
 
@@ -158,17 +151,14 @@ class Panel:
         """
         if self.week == 1:
             return
-
         self.week -= 1
-
         self.clear_frame(table)
-
         self.show_table(self.t.timeline["week" + str(self.week)], table)
 
     def clear_frame(self, table):
         for widget in table.winfo_children():
             widget.destroy()
 
-#   Panel(window, height, width).create_panel()
+# Panel(window, height, width).create_panel()
 
-#   window.mainloop()
+# window.mainloop()
