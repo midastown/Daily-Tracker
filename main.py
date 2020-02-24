@@ -48,12 +48,10 @@ if __name__ == "__main__":
     window = Tk()
     window.title("Daily Tracker")
     window.geometry(str(width) + "x" + str(height))
-    print(os.path.isfile("timeline-data/timeline.data"))
-    try:
-        f = open("timeline-data/timeline.data")
-        f.close()
+
+    if os.path.isfile("timeline-data/timeline.data"):
         found = True
-    except FileNotFoundError:
+    else:
         found = False
 
     t = loadTimeline(found)
