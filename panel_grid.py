@@ -2,12 +2,6 @@ from tkinter import *
 from tkinter.ttk import Notebook
 from timeline import *
 from main import *
-# width  = 800
-# height = 500
-
-# window = Tk()
-# window.title("Daily Tracker")
-# window.geometry(str(width) + "x" + str(height))
 
 class Panel:
 
@@ -22,29 +16,19 @@ class Panel:
 
     def create_panel(self):
         """
-        This function does a few things, first it creates frames, so that each frame is like a region in the 
-        800 by 500 App. This helps with the organisation of content, in this case there is only one frame with tabs
-        as its primary layout. But if for example you need to add buttons, you just create a new frame and you're not
-        bound by the tab layout or the table layout
-
-        I created the tab using the Notebook api from ttk. You can read about it in 
-            https://wiki.tcl-lang.org/page/tkinter.Notebook
+        this function shows two things, the tracker and a graph that shows the data tracked so far
         """
         # Main Frame creation
         frame1 = Frame(self.window)
         frame1.pack(fill="both")
         tablayout = Notebook(frame1)
  
-        # This is the tab with the Table 
+        ##### TRACKER #####
         tab = Frame(tablayout)
         tab.pack(fill="both")
-
         table = Frame(tab)
         table.pack(fill="both")
-
         self.show_table(self.t.timeline["week" + str(self.week)], table)
-        
-
         week_modifs = Frame(tab)
         week_modifs.pack(side=BOTTOM)
         next_week = Button(week_modifs,text='Next Week',command= lambda: self.next_week(table))
@@ -59,17 +43,15 @@ class Panel:
         last_week.pack(side=LEFT)
         save = Button(week_modifs, text="Save", command= lambda: self.save()) 
         save.pack(side=LEFT)
-
         tablayout.add(tab, text="Current Week")  # once its grided this add it to the new tab under a different title 
        
         
-        # Example of a tab that does nothing much but display text
+        ##### STATISTICS #####
         tab = Frame(tablayout)        # creating a nested frame
         tab.pack(fill="both")
         label = Label(tab, text="One can imagine adding cool stats about the tracking so far")
         label.pack() 
         tablayout.add(tab, text="Statistics")   # once its packed you can add it to the window object under a title
-      
         tablayout.pack(fill="both") # once everything is done now you pack the tablayout
 
     def save(self):
@@ -113,13 +95,11 @@ class Panel:
         # this last line makes the width of the column responsive to change in width of the window
         
 
-    def add_week(self):
-        pass
-
     def add_activity(self, activity, table):
         week = self.t.timeline["week" + str(self.week)]
         self.t.add_activity(week, activity)
         self.show_table(self.t.timeline["week" + str(self.week)], table)
+
 
     def remove_activity(self, activity, table):
         week = self.t.timeline['week' + str(self.week)]
@@ -128,11 +108,6 @@ class Panel:
         self.clear_frame(table)
         self.show_table(self.t.timeline['week' + str(self.week)], table)
 
-    def modify_mood(self):
-        pass
-
-    def modify_percent_done(self):
-        pass
     
     def next_week(self, table):
         """
@@ -159,6 +134,3 @@ class Panel:
         for widget in table.winfo_children():
             widget.destroy()
 
-# Panel(window, height, width).create_panel()
-
-# window.mainloop()

@@ -1,4 +1,5 @@
 import pickle
+import os
 from panel_grid import * 
 
 
@@ -21,7 +22,8 @@ def saveTimeline(t):
     """
     This will save the timeline object in timeline.data.
     """
-    pickle.dump(t, open('timeline-data/timeline.data', 'wb'), 4)
+    with open('timeline-data/timeline.data', 'wb') as f:
+        pickle.dump(t, f, 4)
 
 
 def loadTimeline(found):
@@ -31,8 +33,8 @@ def loadTimeline(found):
     Returns: a Timeline Object
     """
     if found:
-        t = pickle.load(open('timeline-data/timeline.data', 'rb')) 
-        print(t.timeline)
+        with open('timeline-data/timeline.data', 'rb') as f:
+            t = pickle.load(f)
     else:
         t = Timeline()
 
@@ -46,7 +48,7 @@ if __name__ == "__main__":
     window = Tk()
     window.title("Daily Tracker")
     window.geometry(str(width) + "x" + str(height))
-    
+    print(os.path.isfile("timeline-data/timeline.data"))
     try:
         f = open("timeline-data/timeline.data")
         f.close()
