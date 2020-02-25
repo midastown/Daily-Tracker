@@ -1,5 +1,6 @@
 from day import *
 from datetime import date
+from check import *
 
 class Timeline:
 
@@ -42,17 +43,20 @@ class Timeline:
         for i in week:
             days.append(i.date.strftime("%A"))
         return days
+
             
     def add_activity(self, week, activity):
         """
         instantiate an activity in each day, or appends to an already instantiated variable
+        # activities = [[activity1, 0], [activity2, 0],...]
+        # activities = [[activity1, Check()], [activity2, Check()], ...]
         """
         for i in week:
+            c = Check()
             if i.activities:
-                i.activities.append([activity, 0])
-            else:                                       # activities = [[activity1, 0], [activity2, 0],...]
-                                                        # activities = [[activity1, IntVar()], [activity2, IntVar()], ...]
-                i.activities = [[activity, 0]]
+                i.activities.append([activity, c])
+            else:                           
+                i.activities = [[activity, c]]
 
     def remove_activity(self, week, activityNum):
         for i in week:
@@ -68,7 +72,6 @@ class Timeline:
             return activity_names
         else:
             return [" "]
-
 
 
 

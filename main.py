@@ -1,4 +1,5 @@
 import pickle
+import os
 from panel_grid import * 
 
 
@@ -10,7 +11,7 @@ def cleanUpTimeline(t):
     if t.week == 1:
         t.add_week()
     else:
-        last_day = t.timeline["week" + str(t.week - 1)][6].date
+        last_day = t.timeline["week" + str(t.week - 1)][-1].date
         distance = (last_day - date.today()).days + 1
         
         while distance < 0:
@@ -21,8 +22,9 @@ def saveTimeline(t):
     """
     This will save the timeline object in timeline.data.
     """
-    with open('timeline.data', 'wb') as f:
-        pickle.dump(t, f)
+    with open('timeline-data/timeline.data', 'wb') as f:
+        pickle.dump(t, f, 4)
+
 
 def loadTimeline(found):
     """
@@ -31,7 +33,7 @@ def loadTimeline(found):
     Returns: a Timeline Object
     """
     if found:
-        with open('timeline.data', 'rb') as f:
+        with open('timeline-data/timeline.data', 'rb') as f:
             t = pickle.load(f)
     else:
         t = Timeline()
@@ -46,18 +48,16 @@ if __name__ == "__main__":
     window = Tk()
     window.title("Daily Tracker")
     window.geometry(str(width) + "x" + str(height))
-    
-    try:
-        f = open("timeline.data")
-        f.close()
+
+    if os.path.isfile("timeline-data/timeline.data"):
         found = True
-    except FileNotFoundError:
+    else:
         found = False
 
     t = loadTimeline(found)
     cleanUpTimeline(t)
     saveTimeline(t)
-    Panel(window, height, width).create_panel()
+    Panel(window, height, width, t).create_panel()
 
     window.mainloop()
 

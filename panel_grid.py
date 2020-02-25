@@ -1,81 +1,62 @@
 from tkinter import *
 from tkinter.ttk import Notebook
 from timeline import *
-
-width  = 800
-height = 500
-
-window = Tk()
-window.title("Daily Tracker")
-window.geometry(str(width) + "x" + str(height))
+from main import *
 
 class Panel:
 
-    def __init__(self, window, heigth, width):
+    def __init__(self, window, heigth, width, t):
         self.window = window
         self.heigth = heigth
         self.width  = width
         self.week = 1
-        self.activities = ['Activity 1', 'Activity 2', 'Activity 3', 'Activity 4', 'Activity 5']
-        self.days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-        self.t = Timeline()
-        self.t.add_week()
-        
-        # The way I do the grid, the fonts "need??" to be initiated when adding to the cells. Not sure about the
-        # "need" but this is the way I found working, so maybe you can do better.
-
+        self.t = t
+        self.e = {}          # stores IntVars
+        self.n = 0
 
     def create_panel(self):
         """
-        This function does a few things, first it creates frames, so that each frame is like a region in the 
-        800 by 500 App. This helps with the organisation of content, in this case there is only one frame with tabs
-        as its primary layout. But if for example you need to add buttons, you just create a new frame and you're not
-        bound by the tab layout or the table layout
-
-        I created the tab using the Notebook api from ttk. You can read about it in 
-            https://wiki.tcl-lang.org/page/tkinter.Notebook
+        this function shows two things, the tracker and a graph that shows the data tracked so far
         """
         # Main Frame creation
-        frame1 = Frame(window)
+        frame1 = Frame(self.window)
         frame1.pack(fill="both")
         tablayout = Notebook(frame1)
  
-        # This is the tab with the Table 
+        ##### TRACKER #####
         tab = Frame(tablayout)
         tab.pack(fill="both")
-
         table = Frame(tab)
         table.pack(fill="both")
-
         self.show_table(self.t.timeline["week" + str(self.week)], table)
-        
-
         week_modifs = Frame(tab)
         week_modifs.pack(side=BOTTOM)
         next_week = Button(week_modifs,text='Next Week',command= lambda: self.next_week(table))
         next_week.pack(side=RIGHT)
-        activityEntry = Entry(week_modifs)         # entry for new activity
+        activityEntry = Entry(week_modifs)         
         activityEntry.pack(side=LEFT)
-        b = Button(week_modifs,command=lambda: self.add_activity(activityEntry.get(), table),text='Add Activity') # submit button
+        b = Button(week_modifs,command=lambda: self.add_activity(activityEntry.get(), table),text='Add Activity')
         b.pack(side=LEFT)
         b = Button(week_modifs,command=lambda: self.remove_activity(activityEntry.get(),table),text='Remove Activity')
         b.pack(side=LEFT)
         last_week = Button(week_modifs,text='Last Week',command= lambda: self.last_week(table))
         last_week.pack(side=LEFT)
-
-
+        save = Button(week_modifs, text="Save", command= lambda: self.save()) 
+        save.pack(side=LEFT)
         tablayout.add(tab, text="Current Week")  # once its grided this add it to the new tab under a different title 
        
         
-        # Example of a tab that does nothing much but display text
+        ##### STATISTICS #####
         tab = Frame(tablayout)        # creating a nested frame
         tab.pack(fill="both")
         label = Label(tab, text="One can imagine adding cool stats about the tracking so far")
         label.pack() 
         tablayout.add(tab, text="Statistics")   # once its packed you can add it to the window object under a title
-      
         tablayout.pack(fill="both") # once everything is done now you pack the tablayout
 
+    def save(self):
+        data = self.t
+        pickle.dump(data, open('timeline-data/timeline.data', 'wb'), 4)
 
     def show_table(self, week, tab):
         """
@@ -83,25 +64,25 @@ class Panel:
         """
         days = self.t.get_days_names(week)
         activities = self.t.get_activities_names(week)
+        self.e = {}
+        self.n = 0
 
         for i in range(len(activities)+1):              # for rows in activities
             for j in range(len(days)+1):                # for cols in days
                 if i == 0 and j == 0:                                  # if its first cell, add empty cell
                     self.labeling(tab, i, j, Label(tab, text=" "))
                 elif i == 0:                                           # adding the name of the day
-                    #print( "This is j: " + str(j) + ", this is i: " + str(i))
                     self.labeling(tab, i, j, Label(tab, text=days[j-1]))
                 elif activities[0] == " ":                             # if there are no activities 
                     self.labeling(tab, i, j, Label(tab, text=" "))
                 elif j == 0:                                           # adding the name of the activity
                     self.labeling(tab, i, j, Label(tab, text=str(i) + ' - ' + activities[i-1]))
                 else:                                                  # adding the checkboxes
-                    if week[j-1].activities[i-1][1] == 0:
-                        var = IntVar()
-                        week[j-1].activities[i-1][1] = var # week[0].activities[]
-                    else:
-                        var = week[j-1].activities[i-1][1]
-                    self.labeling(tab, i, j, Checkbutton(tab, variable=var))
+                    c = week[j-1].activities[i-1][1]
+                    self.e["e"+str(self.n)] = IntVar(value=c.get_value())
+                    element = Checkbutton(tab, variable=self.e["e"+str(self.n)], command=lambda check=c : check.toggle())
+                    self.labeling(tab, i, j, element)
+                    self.n += 1
 
 
     def labeling(self, tab, i, j, element):
@@ -114,13 +95,11 @@ class Panel:
         # this last line makes the width of the column responsive to change in width of the window
         
 
-    def add_week(self):
-        pass
-
     def add_activity(self, activity, table):
         week = self.t.timeline["week" + str(self.week)]
         self.t.add_activity(week, activity)
         self.show_table(self.t.timeline["week" + str(self.week)], table)
+
 
     def remove_activity(self, activity, table):
         week = self.t.timeline['week' + str(self.week)]
@@ -129,11 +108,6 @@ class Panel:
         self.clear_frame(table)
         self.show_table(self.t.timeline['week' + str(self.week)], table)
 
-    def modify_mood(self):
-        pass
-
-    def modify_percent_done(self):
-        pass
     
     def next_week(self, table):
         """
@@ -141,11 +115,8 @@ class Panel:
         """
         if ("week" + str(self.week + 1)) not in self.t.timeline:
             self.t.add_week()
-        
         self.week += 1
-
         self.clear_frame(table)
-
         self.show_table(self.t.timeline["week" + str(self.week)], table)
 
 
@@ -155,17 +126,11 @@ class Panel:
         """
         if self.week == 1:
             return
-
         self.week -= 1
-
         self.clear_frame(table)
-
         self.show_table(self.t.timeline["week" + str(self.week)], table)
 
     def clear_frame(self, table):
         for widget in table.winfo_children():
             widget.destroy()
 
-Panel(window, height, width).create_panel()
-
-window.mainloop()
