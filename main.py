@@ -23,7 +23,7 @@ def saveTimeline(t):
     This will save the timeline object in timeline.data.
     """
     with open('timeline-data/timeline.data', 'wb') as f:
-        pickle.dump(t, f, 4)
+        pickle.dump(t, f)
 
 
 def loadTimeline(found):
