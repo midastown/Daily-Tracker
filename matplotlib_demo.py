@@ -3,8 +3,8 @@ from numpy import arange, sin, pi
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
-import random
 from datetime import date
+
 
 class Stats():
     def __init__(self):
@@ -22,7 +22,7 @@ class Stats():
         """
         week = 1
         day = 0
-        weekLength = len(t["week"+str(week)])
+        weekLength = len(t.timeline["week"+str(week)])
         currentDay = t.timeline["week"+str(week)][day]
 
         while currentDay.date != date.today():       # O(number of days until today in timeline)
@@ -33,17 +33,19 @@ class Stats():
             percent = round((count * 100)/len(currentDay.activities))
             self.dayPercent.append(percent)
             self.moods.append(currentDay.mood)
-            self.dates.append(currentDay.date)
+            self.dates.append(currentDay.date.isoformat())
             if (day + 1) == weekLength:
                 if ("week"+str(week + 1)) in t.timeline:
                     day = 0
                     week += 1
-                    weekLength = len(t.["week"+str(week)])
+                    weekLength = len(t.timeline["week"+str(week)])
                     currentDay = t.timeline["week"+str(week)][day]
             else:
                 day += 1
                 currentDay = t.timeline["week"+str(week)][day]
 
+    def get_variables(self):
+        return (self.dayPercent, self.moods, self.dates)
 
     def create_canvas(self, frame):
          
