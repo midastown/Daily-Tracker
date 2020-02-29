@@ -84,6 +84,17 @@ class Panel:
                     self.labeling(tab, i, j, element)
                     self.n += 1
 
+        moods = [i for i in range(1,11)]
+
+        c = 0
+
+        for i in self.t.timeline['week' + str(self.week)]:
+            c += 1
+            var = StringVar(tab)
+            var.set(i.mood)
+
+            w = OptionMenu(tab, var, *moods)
+            w.grid(column=c,row=len(activities)+1)
 
     def labeling(self, tab, i, j, element):
         """
@@ -98,6 +109,7 @@ class Panel:
     def add_activity(self, activity, table):
         week = self.t.timeline["week" + str(self.week)]
         self.t.add_activity(week, activity)
+        self.clear_frame(table)
         self.show_table(self.t.timeline["week" + str(self.week)], table)
 
 
