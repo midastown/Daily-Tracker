@@ -57,14 +57,7 @@ class Panel:
         tablayout.pack(fill="both") # once everything is done now you pack the tablayout
 
     def save(self, tab):
-        moods = self.get_optionbox_vals(tab)
-
-        c = 0
-
-        for i in self.t.timeline['week' + str(self.week)]:
-            i.mood = moods[c]
-            c  += 1
-
+        self.save_optionbox_vals(tab)
         data = self.t
         pickle.dump(data, open('timeline-data/timeline.data', 'wb'), 4)
 
@@ -106,7 +99,7 @@ class Panel:
             w = OptionMenu(tab, var, *moods)
             w.grid(column=c,row=len(activities)+1)
 
-    def get_optionbox_vals(self, table):
+    def save_optionbox_vals(self, table):
         moods = []
 
         for widget in table.winfo_children():
@@ -115,7 +108,11 @@ class Panel:
                     if item == 'text':
                         moods.append(widget.cget(item))
 
-        return moods
+        c = 0
+
+        for i in self.t.timeline['week' + str(self.week)]:
+            i.mood = moods[c]
+            c  += 1
 
     def labeling(self, tab, i, j, element):
         """
@@ -148,6 +145,7 @@ class Panel:
         """
         if ("week" + str(self.week + 1)) not in self.t.timeline:
             self.t.add_week()
+        self.save_optionbox_vals(table)
         self.week += 1
         self.clear_frame(table)
         self.show_table(self.t.timeline["week" + str(self.week)], table)
@@ -159,6 +157,7 @@ class Panel:
         """
         if self.week == 1:
             return
+        self.save_optionbox_vals(table)
         self.week -= 1
         self.clear_frame(table)
         self.show_table(self.t.timeline["week" + str(self.week)], table)
