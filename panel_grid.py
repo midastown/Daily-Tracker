@@ -35,13 +35,15 @@ class Panel:
         next_week.pack(side=RIGHT)
         activityEntry = Entry(week_modifs)         
         activityEntry.pack(side=LEFT)
+        b = Button(week_modifs,command=lambda: self.getVals(table), text='Find Vals')
+        b.pack(side=LEFT)
         b = Button(week_modifs,command=lambda: self.add_activity(activityEntry.get(), table),text='Add Activity')
         b.pack(side=LEFT)
         b = Button(week_modifs,command=lambda: self.remove_activity(activityEntry.get(),table),text='Remove Activity')
         b.pack(side=LEFT)
         last_week = Button(week_modifs,text='Last Week',command= lambda: self.last_week(table))
         last_week.pack(side=LEFT)
-        save = Button(week_modifs, text="Save", command= lambda: self.save()) 
+        save = Button(week_modifs, text="Save", command= lambda: self.save(table)) 
         save.pack(side=LEFT)
         tablayout.add(tab, text="Current Week")  # once its grided this add it to the new tab under a different title 
        
@@ -54,7 +56,15 @@ class Panel:
         tablayout.add(tab, text="Statistics")   # once its packed you can add it to the window object under a title
         tablayout.pack(fill="both") # once everything is done now you pack the tablayout
 
-    def save(self):
+    def save(self, tab):
+        moods = self.get_optionbox_vals(tab)
+
+        c = 0
+
+        for i in self.t.timeline['week' + str(self.week)]:
+            i.mood = moods[c]
+            c  += 1
+
         data = self.t
         pickle.dump(data, open('timeline-data/timeline.data', 'wb'), 4)
 
@@ -95,6 +105,17 @@ class Panel:
 
             w = OptionMenu(tab, var, *moods)
             w.grid(column=c,row=len(activities)+1)
+
+    def get_optionbox_vals(self, table):
+        moods = []
+
+        for widget in table.winfo_children():
+            if '!optionmenu' in str(widget):
+                for item in widget.keys():
+                    if item == 'text':
+                        moods.append(widget.cget(item))
+
+        return moods
 
     def labeling(self, tab, i, j, element):
         """
