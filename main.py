@@ -1,7 +1,7 @@
 import pickle
 import os
 from panel_grid import * 
-
+from stats import Stats
 
 def cleanUpTimeline(t):
     """
@@ -49,15 +49,13 @@ if __name__ == "__main__":
     window.title("Daily Tracker")
     window.geometry(str(width) + "x" + str(height))
 
-    if os.path.isfile("timeline-data/timeline.data"):
-        found = True
-    else:
-        found = False
+    found = os.path.isfile("timeline-data/timeline.data")
 
     t = loadTimeline(found)
     cleanUpTimeline(t)
     saveTimeline(t)
+    s = Stats()
+    s.set_variables(t)
     Panel(window, height, width, t).create_panel()
 
     window.mainloop()
-
