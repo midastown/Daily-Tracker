@@ -59,4 +59,3 @@ if __name__ == "__main__":
     Panel(window, height, width, t).create_panel()
 
     window.mainloop()
-

@@ -13,6 +13,10 @@ class Panel:
         self.t = t
         self.e = {}          # stores IntVars
         self.n = 0
+        self.s = {}
+        self.n2 = 0
+        self.m = {}
+        self.n3 = 0
 
     def create_panel(self):
         """
@@ -53,6 +57,7 @@ class Panel:
         label.pack() 
         tablayout.add(tab, text="Statistics")   # once its packed you can add it to the window object under a title
         tablayout.pack(fill="both") # once everything is done now you pack the tablayout
+        
 
     def save(self):
         data = self.t
@@ -66,23 +71,38 @@ class Panel:
         activities = self.t.get_activities_names(week)
         self.e = {}
         self.n = 0
+        self.s = {}
+        self.n2 = 0
+        
+        mood = [1,2,3,4,5,6,7,8,9,10]
 
-        for i in range(len(activities)+1):              # for rows in activities
+        for i in range(len(activities)+2):              # for rows in activities
             for j in range(len(days)+1):                # for cols in days
                 if i == 0 and j == 0:                                  # if its first cell, add empty cell
                     self.labeling(tab, i, j, Label(tab, text=" "))
                 elif i == 0:                                           # adding the name of the day
                     self.labeling(tab, i, j, Label(tab, text=days[j-1]))
+                elif i == (len(activities) + 1) and j == 0:
+                    self.labeling(tab, i, j, Label(tab, text="mood"))
+                elif i == (len(activities) + 1):
+                    m = week[j-1].mood
+                    self.s["e"+str(self.n2)] = StringVar(value=week[j-1].mood.get_value())
+                    elem = OptionMenu(tab, self.s["e"+str(self.n2)], *mood, command=lambda mood=m, k=j-1: self.storeM(mood,k))
+                    self.labeling(tab, i, j, elem)
+                    self.n2 += 1
                 elif activities[0] == " ":                             # if there are no activities 
                     self.labeling(tab, i, j, Label(tab, text=" "))
                 elif j == 0:                                           # adding the name of the activity
                     self.labeling(tab, i, j, Label(tab, text=str(i) + ' - ' + activities[i-1]))
-                else:                                                  # adding the checkboxes
+                elif i != (len(activities) + 1):                                                  # adding the checkboxes
                     c = week[j-1].activities[i-1][1]
                     self.e["e"+str(self.n)] = IntVar(value=c.get_value())
                     element = Checkbutton(tab, variable=self.e["e"+str(self.n)], command=lambda check=c : check.toggle())
                     self.labeling(tab, i, j, element)
                     self.n += 1
+
+    def storeM(self, m, k):
+        self.t.timeline["week"+str(self.week)][k].mood.set_value(m)
 
 
     def labeling(self, tab, i, j, element):
@@ -98,6 +118,7 @@ class Panel:
     def add_activity(self, activity, table):
         week = self.t.timeline["week" + str(self.week)]
         self.t.add_activity(week, activity)
+        self.clear_frame(table)
         self.show_table(self.t.timeline["week" + str(self.week)], table)
 
 
