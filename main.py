@@ -1,7 +1,7 @@
 import pickle
 import os
 from panel_grid import * 
-from matplotlib_demo import Stats
+from stats import Stats
 
 def cleanUpTimeline(t):
     """
