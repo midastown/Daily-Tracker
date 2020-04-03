@@ -24,15 +24,20 @@ class Stats():
         day = 0
         weekLength = len(t.timeline["week"+str(week)])
         currentDay = t.timeline["week"+str(week)][day]
+        
+        last_day = t.timeline["week"+str(t.week - 1)][-1].date
 
+        """
         while currentDay.date != date.today():       # O(number of days until today in timeline)
+        """
+        while currentDay.date != last_day:
             count = 0
             for activity in currentDay.activities:   # O(number of activities in each day)
                 if activity[1].get_value() == 1:
                     count += 1
             percent = round((count * 100)/len(currentDay.activities))
             self.dayPercent.append(percent)
-            self.moods.append(currentDay.mood)
+            self.moods.append(currentDay.mood.get_value())
             self.dates.append(currentDay.date.isoformat())
             if (day + 1) == weekLength:
                 if ("week"+str(week + 1)) in t.timeline:
