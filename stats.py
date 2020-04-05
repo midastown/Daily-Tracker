@@ -84,15 +84,14 @@ class Stats():
 
         # basically this just shows the graph
         canvas = FigureCanvasTkAgg(fig, master=frame)
-        """This will be done in create_panel"""
-        #   canvas.draw()
-        #   canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=1)
-        #   canvas._tkcanvas.pack(side=TOP, fill=BOTH, expand=1)
+        canvas.draw()
+        canvas.get_tk_widget().pack(fill="both", expand=1)
+        canvas._tkcanvas.pack(fill="both", expand=1)
 
         # quits when closed
         plt.close('all')
 
-        return canvas
+
 
 
 

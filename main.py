@@ -44,28 +44,25 @@ def loadTimeline(found):
 
 if __name__ == "__main__":
 
-    #width, height = (800, 500)
-    #window = Tk()
-    #window.title("Daily Tracker")
-    #window.geometry(str(width) + "x" + str(height))
+    width, height = (800, 500)
+    window = Tk()
+    window.title("Daily Tracker")
+    window.geometry(str(width) + "x" + str(height))
 
     found = os.path.isfile("timeline-data/timeline.data")
 
     t = loadTimeline(found)
     cleanUpTimeline(t)
     saveTimeline(t)
-    print(t.timeline)
-    print(t.week)
     s = Stats()
     s.set_variables(t)
     
-    print("=============================================================")
     data = s.get_variables()
     for e in data:
         print(e)
     
 
 
-    #Panel(window, height, width, t).create_panel()
+    Panel(window, height, width, t, s).create_panel()
 
-    #window.mainloop()
+    window.mainloop()

@@ -5,7 +5,7 @@ from main import *
 
 class Panel:
 
-    def __init__(self, window, heigth, width, t):
+    def __init__(self, window, heigth, width, t, s):
         self.window = window
         self.heigth = heigth
         self.width  = width
@@ -17,6 +17,7 @@ class Panel:
         self.n2 = 0
         self.m = {}
         self.n3 = 0
+        self.stata = s
 
     def create_panel(self):
         """
@@ -53,8 +54,11 @@ class Panel:
         ##### STATISTICS #####
         tab = Frame(tablayout)        # creating a nested frame
         tab.pack(fill="both")
-        label = Label(tab, text="One can imagine adding cool stats about the tracking so far")
-        label.pack() 
+        #label = Label(tab, text="One can imagine adding cool stats about the tracking so far")
+        #label.pack() 
+        self.stata.create_canvas(tab)
+
+
         tablayout.add(tab, text="Statistics")   # once its packed you can add it to the window object under a title
         tablayout.pack(fill="both") # once everything is done now you pack the tablayout
         
