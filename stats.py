@@ -26,11 +26,11 @@ class Stats():
         currentDay = t.timeline["week"+str(week)][day]
         
         last_day = t.timeline["week"+str(t.week - 1)][-1].date
-
-        """
-        while currentDay.date != date.today():       # O(number of days until today in timeline)
         """
         while currentDay.date != last_day:
+        """
+
+        while currentDay.date != date.today():       # O(number of days until today in timeline)
             count = 0
             for activity in currentDay.activities:   # O(number of activities in each day)
                 if activity[1].get_value() == 1:
