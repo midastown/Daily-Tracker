@@ -27,16 +27,21 @@ class Stats():
         
         last_day = t.timeline["week"+str(t.week - 1)][-1].date
         """
-        while currentDay.date != last_day:
+        while currentDay.date != date.today():       # O(number of days until today in timeline)
         """
 
-        while currentDay.date != date.today():       # O(number of days until today in timeline)
-            count = 0
-            for activity in currentDay.activities:   # O(number of activities in each day)
-                if activity[1].get_value() == 1:
-                    count += 1
-            percent = round((count * 100)/len(currentDay.activities))
+            
+        while currentDay.date != last_day:
+            if currentDay.activities:
+                count = 0
+                for activity in currentDay.activities:   # O(number of activities in each day)
+                    if activity[1].get_value() == 1:
+                        count += 1
+                percent = round((count * 100)/len(currentDay.activities))
+            else:
+                percent = 0
             self.dayPercent.append(percent)
+
             self.moods.append(currentDay.mood.get_value())
             self.dates.append(currentDay.date.isoformat())
             if (day + 1) == weekLength:
@@ -52,6 +57,17 @@ class Stats():
     def get_variables(self):
         return (self.dayPercent, self.moods, self.dates)
 
+    def format_dates(self):
+        jump = len(self.dates) // 7
+        newDates = []
+        for i in range(0, len(self.dates), jump):
+            newDates.append(self.dates[i])
+        print(newDates)
+        print("=============================")
+        print("=============================")
+        print("=============================")
+        return newDates
+
     def create_canvas(self, frame):
          
         # Use tkinter for matplotlib
@@ -61,20 +77,32 @@ class Stats():
         # and ax2, it means we can plot them both on the same graph and have two different
         # y axis. figsize is the size of the window
         # do we need to predetermine the size rn, can we do that when drawing the canvas inside the tab ?
-        fig, ax1 = plt.subplots(figsize=(9,4))
+        fig, ax1 = plt.subplots()
         ax2 = ax1.twinx()
 
         # lbl1 is a plot on ax1, but by creating a variable out of it we can combine with ax2.
         # by doing this, we can have both legends in the same area
         # g- is green
         # b- is blue
+        """This is a test to show less dates"""
+       #if len(self.dates) > 14:
+       #    newDates = self.format_dates()
+       #    lbl1 = ax1.plot(newDates, self.dayPercent, 'g-',label='Acvitivies Done %')
+       #else:
+       #    lbl1 = ax1.plot(self.dates, self.dayPercent, 'g-',label='Acvitivies Done %')
+
+
         lbl1 = ax1.plot(self.dates, self.dayPercent, 'g-',label='Acvitivies Done %')
+        
         ax1.set_title('Percent Per Day')
         ax1.set_xlabel('Date')
         ax1.set_ylabel('Activity Done Percent')
+        ax1.set_ylim(ymin=0, ymax=100)
         lbl2 = ax2.plot(self.dates, self.moods,'b-',label='Average Mood')
         ax2.set_ylabel('Mood')
+        ax2.set_ylim(ymin=1, ymax=10)
 
+        fig.autofmt_xdate()
         # here we put ax1s and ax2s 'attributes' together
         lbl = lbl1 + lbl2
         # here we get all the labels from them
