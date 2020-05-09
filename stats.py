@@ -1,5 +1,5 @@
 import matplotlib
-from numpy import arange, sin, pi
+import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
@@ -43,7 +43,7 @@ class Stats():
             self.dayPercent.append(percent)
 
             self.moods.append(currentDay.mood.get_value())
-            self.dates.append(currentDay.date.isoformat())
+            self.dates.append(currentDay.date)
             if (day + 1) == weekLength:
                 if ("week"+str(week + 1)) in t.timeline:
                     day = 0
@@ -57,19 +57,11 @@ class Stats():
     def get_variables(self):
         return (self.dayPercent, self.moods, self.dates)
 
-    def format_dates(self):
-        jump = len(self.dates) // 7
-        newDates = []
-        for i in range(0, len(self.dates), jump):
-            newDates.append(self.dates[i])
-        print(newDates)
-        print("=============================")
-        print("=============================")
-        print("=============================")
-        return newDates
 
     def create_canvas(self, frame):
-         
+        
+
+        dates = np.array(self.dates)
         # Use tkinter for matplotlib
         matplotlib.use('TkAgg')
 
@@ -84,25 +76,29 @@ class Stats():
         # by doing this, we can have both legends in the same area
         # g- is green
         # b- is blue
-        """This is a test to show less dates"""
-       #if len(self.dates) > 14:
-       #    newDates = self.format_dates()
-       #    lbl1 = ax1.plot(newDates, self.dayPercent, 'g-',label='Acvitivies Done %')
-       #else:
-       #    lbl1 = ax1.plot(self.dates, self.dayPercent, 'g-',label='Acvitivies Done %')
 
 
-        lbl1 = ax1.plot(self.dates, self.dayPercent, 'g-',label='Acvitivies Done %')
+        lbl1 = ax1.plot(dates, self.dayPercent, 'g-',label='Acvitivies Done %')
         
         ax1.set_title('Percent Per Day')
+
+        # X-axis ploting and formatting
         ax1.set_xlabel('Date')
+        # first Y-axis ploting and formatting
         ax1.set_ylabel('Activity Done Percent')
         ax1.set_ylim(ymin=0, ymax=100)
-        lbl2 = ax2.plot(self.dates, self.moods,'b-',label='Average Mood')
+        lbl2 = ax2.plot(dates, self.moods,'b-',label='Average Mood')
+        
         ax2.set_ylabel('Mood')
         ax2.set_ylim(ymin=1, ymax=10)
 
-        fig.autofmt_xdate()
+        ax1.set_xlim((np.datetime64(dates[0]), np.datetime64(dates[-1])))
+        locator = matplotlib.dates.AutoDateLocator(minticks=3, maxticks=7)
+        formatter = matplotlib.dates.ConciseDateFormatter(locator)
+        ax1.xaxis.set_major_locator(locator)
+        ax1.xaxis.set_major_formatter(formatter)
+
+
         # here we put ax1s and ax2s 'attributes' together
         lbl = lbl1 + lbl2
         # here we get all the labels from them
