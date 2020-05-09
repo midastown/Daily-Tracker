@@ -56,6 +56,13 @@ if __name__ == "__main__":
     saveTimeline(t)
     s = Stats()
     s.set_variables(t)
-    Panel(window, height, width, t).create_panel()
+    
+    data = s.get_variables()
+    for e in data:
+        print(e)
+    
+
+
+    Panel(window, height, width, t, s).create_panel()
 
     window.mainloop()

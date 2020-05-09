@@ -5,7 +5,7 @@ from main import *
 
 class Panel:
 
-    def __init__(self, window, heigth, width, t):
+    def __init__(self, window, heigth, width, t, s):
         self.window = window
         self.heigth = heigth
         self.width  = width
@@ -15,8 +15,7 @@ class Panel:
         self.n = 0
         self.s = {}
         self.n2 = 0
-        self.m = {}
-        self.n3 = 0
+        self.stats = s
 
     def create_panel(self):
         """
@@ -32,30 +31,19 @@ class Panel:
         tab.pack(fill="both")
         table = Frame(tab)
         table.pack(fill="both")
-        self.show_table(self.t.timeline["week" + str(self.week)], table)
-        week_modifs = Frame(tab)
-        week_modifs.pack(side=BOTTOM)
-        next_week = Button(week_modifs,text='Next Week',command= lambda: self.next_week(table))
-        next_week.pack(side=RIGHT)
-        activityEntry = Entry(week_modifs)         
-        activityEntry.pack(side=LEFT)
-        b = Button(week_modifs,command=lambda: self.add_activity(activityEntry.get(), table),text='Add Activity')
-        b.pack(side=LEFT)
-        b = Button(week_modifs,command=lambda: self.remove_activity(activityEntry.get(),table),text='Remove Activity')
-        b.pack(side=LEFT)
-        last_week = Button(week_modifs,text='Last Week',command= lambda: self.last_week(table))
-        last_week.pack(side=LEFT)
-        save = Button(week_modifs, text="Save", command= lambda: self.save()) 
-        save.pack(side=LEFT)
-        tablayout.add(tab, text="Current Week")  # once its grided this add it to the new tab under a different title 
+        self.show_table(self.t.timeline["week" + str(self.week)], table) # Grids the week with data
+        self.add_buttons(tab, table)
+        tablayout.add(tab, text="current week")  
        
         
-        ##### STATISTICS #####
+        ##### statistics #####
         tab = Frame(tablayout)        # creating a nested frame
         tab.pack(fill="both")
-        label = Label(tab, text="One can imagine adding cool stats about the tracking so far")
-        label.pack() 
-        tablayout.add(tab, text="Statistics")   # once its packed you can add it to the window object under a title
+        self.stats.create_canvas(tab)
+
+
+        # once its packed you can add it to the window object under a title
+        tablayout.add(tab, text="statistics")   
         tablayout.pack(fill="both") # once everything is done now you pack the tablayout
         
 
@@ -65,10 +53,11 @@ class Panel:
 
     def show_table(self, week, tab):
         """
-        Creates a Table/Grid showing days, activities, checkboxes, ...
+        creates a table/grid showing days, activities, checkboxes, ...
         """
         days = self.t.get_days_names(week)
         activities = self.t.get_activities_names(week)
+        # these four values exist to store IntVar and StringVar beyond the scope of this function.
         self.e = {}
         self.n = 0
         self.s = {}
@@ -84,7 +73,7 @@ class Panel:
                     self.labeling(tab, i, j, Label(tab, text=days[j-1]))
                 elif i == (len(activities) + 1) and j == 0:
                     self.labeling(tab, i, j, Label(tab, text="mood"))
-                elif i == (len(activities) + 1):
+                elif i == (len(activities) + 1):                       # adding the mood dropdown
                     m = week[j-1].mood
                     self.s["e"+str(self.n2)] = StringVar(value=week[j-1].mood.get_value())
                     elem = OptionMenu(tab, self.s["e"+str(self.n2)], *mood, command=lambda mood=m, k=j-1: self.storeM(mood,k))
@@ -102,7 +91,30 @@ class Panel:
                     self.n += 1
 
     def storeM(self, m, k):
+        """
+        Sets the value chosen in the mood dropdown
+        """
         self.t.timeline["week"+str(self.week)][k].mood.set_value(m)
+
+    def add_buttons(self, tab, table):
+        """
+        adds nextweek, lastweek, save, addactivity, removeactivity buttons
+        """
+        week_modifs = Frame(tab)
+        week_modifs.pack(side=BOTTOM)
+        next_week = Button(week_modifs,text='next week',command= lambda: self.next_week(table))
+        next_week.pack(side=RIGHT)
+        activityentry = Entry(week_modifs)         
+        activityentry.pack(side=LEFT)
+        add = Button(week_modifs,command=lambda: self.add_activity(activityentry.get(), table),text='add activity')
+        add.pack(side=LEFT)
+        remove = Button(week_modifs,command=lambda: self.remove_activity(activityentry.get(),table),text='remove activity')
+        remove.pack(side=LEFT)
+        last_week = Button(week_modifs,text='last week',command= lambda: self.last_week(table))
+        last_week.pack(side=LEFT)
+        save = Button(week_modifs, text="save", command= lambda: self.save()) 
+        save.pack(side=LEFT)
+
 
 
     def labeling(self, tab, i, j, element):
@@ -116,6 +128,9 @@ class Panel:
         
 
     def add_activity(self, activity, table):
+        """
+        Mechanics for the button Add Activity
+        """
         week = self.t.timeline["week" + str(self.week)]
         self.t.add_activity(week, activity)
         self.clear_frame(table)
@@ -123,6 +138,9 @@ class Panel:
 
 
     def remove_activity(self, activity, table):
+        """
+        Mechanics for the button Remove Activity
+        """
         week = self.t.timeline['week' + str(self.week)]
         activityNum = int(activity) - 1
         self.t.remove_activity(week,activityNum)
@@ -132,7 +150,7 @@ class Panel:
     
     def next_week(self, table):
         """
-        Does a few checks before showing the next week
+        refresh panel with the next week data
         """
         if ("week" + str(self.week + 1)) not in self.t.timeline:
             self.t.add_week()
@@ -143,7 +161,7 @@ class Panel:
 
     def last_week(self, table):
         """
-        Shows the last week if it exists
+        refresh panel with last week data
         """
         if self.week == 1:
             return
@@ -152,6 +170,13 @@ class Panel:
         self.show_table(self.t.timeline["week" + str(self.week)], table)
 
     def clear_frame(self, table):
+        """
+        empties the panel
+        """
         for widget in table.winfo_children():
             widget.destroy()
+
+
+
+
 
