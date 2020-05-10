@@ -1,9 +1,6 @@
-from day import *
-from datetime import date
-from check import *
+from datetime import date, timedelta
 
 class Timeline:
-
     def __init__(self):
         self.timeline = {}
         self.week = 1
@@ -74,14 +71,32 @@ class Timeline:
             return [" "]
 
 
+class Day:
+    def __init__(self, time_distance):
+        self.activities = None
+        self.mood       = Mood() 
+        self.percentage = None
+        self.metrics    = {}
+        self.date       = date.today() + timedelta(days = time_distance)
 
 
+class Mood():
+    def __init__(self):
+        self.value = 5
+
+    def get_value(self):
+        return self.value
+
+    def set_value(self, value):
+        self.value = value
 
 
+class Check():
+    def __init__(self):
+        self.value = 0
 
+    def toggle(self):
+        self.value ^= 1
 
-
-
-
-
-
+    def get_value(self):
+        return self.value

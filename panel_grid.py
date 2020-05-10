@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter.ttk import Notebook
-from timeline import *
+from tools import Timeline
 import pickle
 
 class Panel:
