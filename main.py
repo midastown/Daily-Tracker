@@ -58,10 +58,6 @@ if __name__ == "__main__":
     s.set_variables(t)
     
     data = s.get_variables()
-    for e in data:
-        print(e)
-    
-
 
     Panel(window, height, width, t, s).create_panel()
 

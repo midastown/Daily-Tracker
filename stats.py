@@ -16,22 +16,16 @@ class Stats():
         """
         Will loop through the timeline object and append computed data
         to its own dataList UNTIL IT REACH TODAY:
-        self.dayPercent = [50, 40, 30, 70, 70, 80, ...]
-        self.moods = [1, 2, 4, 1, 2, 2, 5, ...]
-        self.dates = [(2020, 4, 1), (2020, 4, 2), (2020, 4, 3), (2020, 4, 4), ...]
+        self.dayPercent = [50, 40, 30, 70, 70, 80,...]
+        self.moods = [1, 2, 4, 1, 2, 2, 5,...]
+        self.dates = [date(2020, 4, 1), date(2020, 4, 2), date(2020, 4, 3),...]
         """
         week = 1
         day = 0
         weekLength = len(t.timeline["week"+str(week)])
         currentDay = t.timeline["week"+str(week)][day]
         
-        last_day = t.timeline["week"+str(t.week - 1)][-1].date
-        """
         while currentDay.date != date.today():       # O(number of days until today in timeline)
-        """
-
-            
-        while currentDay.date != last_day:
             if currentDay.activities:
                 count = 0
                 for activity in currentDay.activities:   # O(number of activities in each day)
@@ -55,11 +49,17 @@ class Stats():
                 currentDay = t.timeline["week"+str(week)][day]
 
     def get_variables(self):
+        """
+        Get function for the data collected
+        """
         return (self.dayPercent, self.moods, self.dates)
 
 
     def create_canvas(self, frame):
-        
+        """
+        Creates the graph seen in the Statistics Tab, designed to show the correlation 
+        between the number of activities done and the overall mood that particular day.
+        """
 
         dates = np.array(self.dates)
         # Use tkinter for matplotlib
@@ -71,27 +71,24 @@ class Stats():
         # do we need to predetermine the size rn, can we do that when drawing the canvas inside the tab ?
         fig, ax1 = plt.subplots()
         ax2 = ax1.twinx()
+        ax1.set_title('Percent Per Day')
 
         # lbl1 is a plot on ax1, but by creating a variable out of it we can combine with ax2.
         # by doing this, we can have both legends in the same area
         # g- is green
         # b- is blue
-
-
-        lbl1 = ax1.plot(dates, self.dayPercent, 'g-',label='Acvitivies Done %')
-        
-        ax1.set_title('Percent Per Day')
-
-        # X-axis ploting and formatting
         ax1.set_xlabel('Date')
-        # first Y-axis ploting and formatting
-        ax1.set_ylabel('Activity Done Percent')
-        ax1.set_ylim(ymin=0, ymax=100)
+        lbl1 = ax1.plot(dates, self.dayPercent, 'g-',label='Acvitivies Done %')
         lbl2 = ax2.plot(dates, self.moods,'b-',label='Average Mood')
         
+        # first and second y-axis formatting
+        ax1.set_ylabel('Activity Done Percent')
+        ax1.set_ylim(ymin=0, ymax=100)
         ax2.set_ylabel('Mood')
         ax2.set_ylim(ymin=1, ymax=10)
 
+        # This will format the x-axis by displaying enough date object so that 
+        # they do not overlap
         ax1.set_xlim((np.datetime64(dates[0]), np.datetime64(dates[-1])))
         locator = matplotlib.dates.AutoDateLocator(minticks=3, maxticks=7)
         formatter = matplotlib.dates.ConciseDateFormatter(locator)

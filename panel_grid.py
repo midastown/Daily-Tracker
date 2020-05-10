@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter.ttk import Notebook
 from timeline import *
-from main import *
+import pickle
 
 class Panel:
 
@@ -11,10 +11,14 @@ class Panel:
         self.width  = width
         self.week = 1
         self.t = t
+        """
+        IntVars and StringVars need to be kept within 
+        the global score to function proprely
+        """
         self.e = {}          # stores IntVars
-        self.n = 0
-        self.s = {}
-        self.n2 = 0
+        self.n = 0           # acts as a buffer to store IntVars indexes
+        self.s = {}          # stores StringVars
+        self.n2 = 0          # acts as a buffer to store StringVar indexes
         self.stats = s
 
     def create_panel(self):
@@ -33,7 +37,7 @@ class Panel:
         table.pack(fill="both")
         self.show_table(self.t.timeline["week" + str(self.week)], table) # Grids the week with data
         self.add_buttons(tab, table)
-        tablayout.add(tab, text="current week")  
+        tablayout.add(tab, text="Current Week")  
        
         
         ##### statistics #####
@@ -43,7 +47,7 @@ class Panel:
 
 
         # once its packed you can add it to the window object under a title
-        tablayout.add(tab, text="statistics")   
+        tablayout.add(tab, text="Statistics")   
         tablayout.pack(fill="both") # once everything is done now you pack the tablayout
         
 
@@ -53,7 +57,7 @@ class Panel:
 
     def show_table(self, week, tab):
         """
-        creates a table/grid showing days, activities, checkboxes, ...
+        creates a table/grid showing days, activities and checkboxes
         """
         days = self.t.get_days_names(week)
         activities = self.t.get_activities_names(week)
