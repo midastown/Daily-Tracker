@@ -2,7 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
+*.txt
 # timeline data
 timeline-data/
 # C extensions
