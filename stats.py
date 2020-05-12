@@ -89,11 +89,13 @@ class Stats():
 
         # This will format the x-axis by displaying enough date object so that 
         # they do not overlap
-        ax1.set_xlim((np.datetime64(dates[0]), np.datetime64(dates[-1])))
-        locator = matplotlib.dates.AutoDateLocator(minticks=3, maxticks=7)
-        formatter = matplotlib.dates.ConciseDateFormatter(locator)
-        ax1.xaxis.set_major_locator(locator)
-        ax1.xaxis.set_major_formatter(formatter)
+        if dates.any():
+
+            ax1.set_xlim((np.datetime64(dates[0]), np.datetime64(dates[-1])))
+            locator = matplotlib.dates.AutoDateLocator(minticks=3, maxticks=7)
+            formatter = matplotlib.dates.ConciseDateFormatter(locator)
+            ax1.xaxis.set_major_locator(locator)
+            ax1.xaxis.set_major_formatter(formatter)
 
 
         # here we put ax1s and ax2s 'attributes' together

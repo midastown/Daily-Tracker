@@ -2,9 +2,9 @@
 __pycache__/
 *.py[cod]
 *$py.class
-*.txt
+notes.txt
 # timeline data
-timeline-data/
+*.data
 # C extensions
 *.so
 
