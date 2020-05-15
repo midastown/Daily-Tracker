@@ -3,10 +3,9 @@
 ## Description
 Application that helps you track your goals, habits and mood. A statistic tab that shows a correlation between what you have done and your overall mood with a simple and intuitive graph.
 
-* Tracker
 ![](Images/table-one.jpg)
 
-* Graph
+
 ![](Images/table-two.jpg)
 
 ## Installation
