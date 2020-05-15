@@ -1,16 +1,32 @@
 # Daily-Tracker
 
 ## Description
-Application that helps you track your goals, habits and mood. A stats part that creates a correlation between what you have done and your overall mood with a simple and intuitive graph. Within the app there is a placeholder to record thoughts and notes on a particular day, some call that a diary... 
+Application that helps you track your goals, habits and mood. A statistic tab that shows a correlation between what you have done and your overall mood with a simple and intuitive graph.
 
-![table-one](https://raw.githubusercontent.com/midastown/Daily-Tracker/master/Images/table-one.jpg)
+* Tracker
+![](Images/table-one.jpg)
 
-
-![table-two](https://raw.githubusercontent.com/midastown/Daily-Tracker/master/Images/table-two.jpg)
+* Graph
+![](Images/table-two.jpg)
 
 ## Installation
 
 ### Requirements
 
-* python3
-* tkinter
+* python3 & pip3
+* ` git clone https://github.com/midastown/Daily-Tracker.git `
+* Use ` pip3 install -r requirements.txt ` to install the required packages
+* ` python3 main.py `
+* Don't forget to save after each session
+
+
+## Notes
+
+### Contributions
+* Me (midastown)
+* [Isaac](https://github.com/IsaacA2151)
+
+### TODO
+* Adding a simple text area linked to each particular day... A diary of some sorts.
+* A function that can export data to csv
+* The ability to save when closing the window instead of clicking a button
