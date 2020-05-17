@@ -89,7 +89,7 @@ class Stats():
 
         # This will format the x-axis by displaying enough date object so that 
         # they do not overlap
-        if dates.any():
+        if len(dates) > 1:
 
             ax1.set_xlim((np.datetime64(dates[0]), np.datetime64(dates[-1])))
             locator = matplotlib.dates.AutoDateLocator(minticks=3, maxticks=7)
