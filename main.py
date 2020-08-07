@@ -7,7 +7,7 @@ from datetime import date
 def cleanUpTimeline(t):
     """
     this will clean up the timeline object by adding the right amount of 
-    weeks missing from last date to today.
+    weeks missing from last_day (in the timeline) to today.
     """
     if t.week == 1:
         t.add_week()

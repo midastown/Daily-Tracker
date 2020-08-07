@@ -34,6 +34,20 @@ class Timeline:
         self.timeline[weekstr] = week                                 # adds a list of days object to the timeline dict
         self.week += 1                                                # increments the self.week variables
 
+    def get_current_week(self):
+        """
+        Gets the current week where today is in it.
+        Since cleanUpTimeline guarantees an up-to-date timeline, we only have to search backwards
+        """
+        today = date.today()
+        week = self.week - 1
+        while week > 0:
+            this_week = self.timeline["week"+str(week)]
+            if today >= this_week[0].date and today <= this_week[-1].date:
+                return week
+            week -= 1
+
+        return week
 
     def get_days_names(self, week):
         days = []

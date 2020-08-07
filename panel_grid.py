@@ -9,17 +9,17 @@ class Panel:
         self.window = window
         self.heigth = heigth
         self.width  = width
-        self.week = 1
         self.t = t
+        self.week = self.t.get_current_week()
+        self.stats = s
         """
-        IntVars and StringVars need to be kept within 
-        the global score to function proprely
+        show_table function creates IntVars and StringVars, but so TK can find them
+        and so it can function well, they need to be kept within the global scope
         """
         self.e = {}          # stores IntVars
-        self.n = 0           # acts as a buffer to store IntVars indexes
+        self.n = 0           # help to ennumerate them (see line 92)
         self.s = {}          # stores StringVars
-        self.n2 = 0          # acts as a buffer to store StringVar indexes
-        self.stats = s
+        self.n2 = 0          # help to ennumerate them (see line 82)
 
     def create_panel(self):
         """
@@ -31,7 +31,7 @@ class Panel:
         tablayout = Notebook(frame1)
  
         ##### TRACKER #####
-        tab = Frame(tablayout)
+        tab = Frame(tablayout)        # creating 1st nested frame
         tab.pack(fill="both")
         table = Frame(tab)
         table.pack(fill="both")
@@ -40,8 +40,8 @@ class Panel:
         tablayout.add(tab, text="Current Week")  
        
         
-        ##### statistics #####
-        tab = Frame(tablayout)        # creating a nested frame
+        ##### STATS #####
+        tab = Frame(tablayout)        # creating 2nd nested frame
         tab.pack(fill="both")
         self.stats.create_canvas(tab)
 
@@ -61,7 +61,7 @@ class Panel:
         """
         days = self.t.get_days_names(week)
         activities = self.t.get_activities_names(week)
-        # these four values exist to store IntVar and StringVar beyond the scope of this function.
+        # initialize to empty buffers.
         self.e = {}
         self.n = 0
         self.s = {}
@@ -71,26 +71,31 @@ class Panel:
 
         for i in range(len(activities)+2):              # for rows in activities
             for j in range(len(days)+1):                # for cols in days
-                if i == 0 and j == 0:                                  # if its first cell, add empty cell
-                    self.labeling(tab, i, j, Label(tab, text=" "))
-                elif i == 0:                                           # adding the name of the day
+                if i == 0 and j == 0:                                  # if its first cell, print date of monday
+                    self.labeling(tab, i, j, Label(tab, text=week[0].date))
+                elif i == 0:                                           # print the weekday
                     self.labeling(tab, i, j, Label(tab, text=days[j-1]))
                 elif i == (len(activities) + 1) and j == 0:
                     self.labeling(tab, i, j, Label(tab, text="mood"))
                 elif i == (len(activities) + 1):                       # adding the mood dropdown
                     m = week[j-1].mood
                     self.s["e"+str(self.n2)] = StringVar(value=week[j-1].mood.get_value())
-                    elem = OptionMenu(tab, self.s["e"+str(self.n2)], *mood, command=lambda mood=m, k=j-1: self.storeM(mood,k))
+                    elem = OptionMenu(tab, \
+                                      self.s["e"+str(self.n2)], \
+                                      *mood, \
+                                      command=lambda mood=m, k=j-1: self.storeM(mood,k))
                     self.labeling(tab, i, j, elem)
                     self.n2 += 1
-                elif activities[0] == " ":                             # if there are no activities 
+                elif activities[0] == " ":                             # if there are no activities  
                     self.labeling(tab, i, j, Label(tab, text=" "))
                 elif j == 0:                                           # adding the name of the activity
                     self.labeling(tab, i, j, Label(tab, text=str(i) + ' - ' + activities[i-1]))
-                elif i != (len(activities) + 1):                                                  # adding the checkboxes
+                elif i != (len(activities) + 1):                       # adding the checkboxes
                     c = week[j-1].activities[i-1][1]
                     self.e["e"+str(self.n)] = IntVar(value=c.get_value())
-                    element = Checkbutton(tab, variable=self.e["e"+str(self.n)], command=lambda check=c : check.toggle())
+                    element = Checkbutton(tab, \
+                                          variable=self.e["e"+str(self.n)], \
+                                          command=lambda check=c : check.toggle())
                     self.labeling(tab, i, j, element)
                     self.n += 1
 
@@ -110,9 +115,13 @@ class Panel:
         next_week.pack(side=RIGHT)
         activityentry = Entry(week_modifs)         
         activityentry.pack(side=LEFT)
-        add = Button(week_modifs,command=lambda: self.add_activity(activityentry.get(), table),text='add activity')
+        add = Button(week_modifs, \
+                     command=lambda: self.add_activity(activityentry.get(), table), \
+                     text='add activity')
         add.pack(side=LEFT)
-        remove = Button(week_modifs,command=lambda: self.remove_activity(activityentry.get(),table),text='remove activity')
+        remove = Button(week_modifs, \
+                        command=lambda: self.remove_activity(activityentry.get(),table), \
+                        text='remove activity')
         remove.pack(side=LEFT)
         last_week = Button(week_modifs,text='last week',command= lambda: self.last_week(table))
         last_week.pack(side=LEFT)
@@ -175,7 +184,7 @@ class Panel:
 
     def clear_frame(self, table):
         """
-        empties the panel
+        empties the panel to get a new clean frame.
         """
         for widget in table.winfo_children():
             widget.destroy()
