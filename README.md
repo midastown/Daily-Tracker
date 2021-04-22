@@ -29,3 +29,5 @@ Application that helps you track your goals, habits and mood. A statistic tab th
 * Adding a simple text area linked to each particular day... A diary of some sorts.
 * A function that can export data to csv
 * The ability to save when closing the window instead of clicking a button
+* The ability to add activity with ENTER instead of dedicated button
+* The ability to navigate weeks with arrows on top of dedicated buttons
